@@ -1,0 +1,37 @@
+html {
+    touch-action:none;
+    width: 100vw;
+    height: 100vh;
+    overflow-y: hidden;
+    overflow-x: hidden;
+    font-size: 3vmin;
+    /* inicio */
+    --imagen-pantalla-fondo01: url("../assets/images/inicio/fondo_01.png");
+    --imagen-pantalla-fondo02: url("../assets/images/inicio/fondo_02.png");
+    /* tarjetachip */
+    --imagen-pantalla-fondo-tarjetachip: url("../assets/images/tarjetachip/fondo-tarjeta_01.png");
+    --imagen-pantalla-boquilla-tarjetachip: url("../assets/images/tarjetachip/boquilla.png");
+    --imagen-pantalla-boquilla-baja-tarjetachip: url("../assets/images/tarjetachip/boquilla-baja.png");
+    --lectortarjetachip-tarjetachip: url("../assets/images/tarjetachip/lector-tarjetachip.png");
+    --tarjeta-visa-credito: url("../assets/images/tarjetachip/t-visa.png");
+    --tarjeta-master-credito: url("../assets/images/tarjetachip/t-master.png");
+    --tarjeta-amex-credito: url("../assets/images/tarjetachip/t-amex.png");
+    --ok-tarjetachip: url("../assets/images/tarjetachip/ok.png");
+    /* vianda */
+    --imagen-pantalla-fondo-vianda: url("../assets/images/vianda/fondo_01.png");
+    --imagen-pantalla-boquilla-vianda: url("../assets/images/vianda/boquilla.png");
+    --imagen-pantalla-boquilla-baja-vianda: url("../assets/images/vianda/boquilla-baja.png");
+    --lectortarjetachip-vianda: url("../assets/images/vianda/lector-tarjetachip.png");
+    --ok-vianda: url("../assets/images/vianda/ok.png");
+}
+
+body {
+    overflow-y: hidden;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    height: 100%;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+
+}

@@ -1,0 +1,4 @@
+export const menues = [
+    { id: 1, idTipo: 1, titulo: "Jamon cocido y queso", descripcion: "Una porcion de tarta 200 gramos. Rellema con Jamon cocido natural y queso fresco Sancor.", precio: 108, url: "http://www.zul.com.ar/bugs/image/tarta-jq-01.png" },
+    { id: 2, idTipo: 1, titulo: "Caprese", descripcion: "Una porcion de tarta 200 gramos. Rellema con Jamon cocido natural y queso fresco Sancor.", precio: 120, url: "http://www.zul.com.ar/bugs/image/tarta-caprese-01.png" },
+    { id: 3, idTipo: 1, titulo: "Humita", descripcion: "Una porcion de tarta 200 gramos. Rellema con Jamon cocido natural y queso fresco Sancor.", precio: 145, url: "http://www.zul.com.ar/bugs/image/tarta-humita-01.png" }]

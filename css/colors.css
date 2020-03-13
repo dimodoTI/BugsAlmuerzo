@@ -1,0 +1,13 @@
+html{
+    --letra-oscura:#000000;
+    --letra-clara:#ffffff;
+    --pantalla-fondo:#978f92;
+    --pantalla-fondo-claro:#ffffff;
+    --pantalla-fondo-oscuro:#000000;
+    --boton-fondo:#ffde03;
+    --boton-texto:#646473;  
+    --titulo-texto:hsl(0, 0%, 95%);
+    --texto-oscuro:#646473;
+    --fondo-etiqueta:#ececec;
+    --color-precio:#b12121;
+}

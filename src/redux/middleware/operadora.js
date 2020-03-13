@@ -32,6 +32,7 @@ export const recibir = ({
                     break
                 case LECTORLED:
                     break
+
             }
         }
         if (action.mensaje.data.indexOf("$") == 0) {

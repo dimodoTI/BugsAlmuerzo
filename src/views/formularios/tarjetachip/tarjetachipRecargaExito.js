@@ -146,7 +146,7 @@ export class pantallaTarjetaChipRecargaExito extends connect(store, MODO_PANTALL
                 ${idiomas[this.idioma].paginas.general.nombreSistema}
             </div>
             <div id="quienEs">   
-                ${store.getState().tarjetachipRecarga.usuario.nombre}
+                ${store.getState().tarjetachipRecarga.usuario ? store.getState().tarjetachipRecarga.usuario.nombre : ""}
             </div>
             <div id="ok">    
             </div>

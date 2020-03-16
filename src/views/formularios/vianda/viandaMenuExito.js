@@ -146,7 +146,7 @@ export class pantallaViandaMenuExito extends connect(store, MODO_PANTALLA)(LitEl
             ${idiomas[this.idioma].paginas.general.nombreSistema}
             </div>
             <div id="quienEs">    
-                ${store.getState().tarjetachipRecarga.usuario.nombre}
+               ${store.getState().tarjetachipRecarga.usuario ? store.getState().tarjetachipRecarga.usuario.nombre : ""}
             </div>
             <div id="ok">    
             </div>

@@ -171,7 +171,7 @@ export class pantallacargaTarjetaCreditoPosNet extends connect(store, MODO_PANTA
                 ${idiomas[this.idioma].paginas.general.nombreSistema}
             </div>
             <div id="quienEs">    
-                ${store.getState().tarjetachipRecarga.usuario.nombre}
+                ${store.getState().tarjetachipRecarga.usuario ? store.getState().tarjetachipRecarga.usuario.nombre : ""}
                 ${idiomas[this.idioma].paginas.cargaPosNet.quienEs01}
                 ${store.getState().tarjetachipRecarga.saldo}
                 ${idiomas[this.idioma].paginas.cargaPosNet.quienEs02}

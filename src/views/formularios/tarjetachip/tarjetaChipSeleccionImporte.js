@@ -156,7 +156,7 @@ export class pantallaTarjetaChipSeleccionImporte extends connect(store, MODO_PAN
             </div>
             <div id="quienEs">
                 ${idiomas[this.idioma].paginas.seleccionImporte.quienEs01}
-                ${store.getState().tarjetachipRecarga.usuario.nombre}
+                ${store.getState().tarjetachipRecarga.usuario ? store.getState().tarjetachipRecarga.usuario.nombre : ""}
                 ${idiomas[this.idioma].paginas.seleccionImporte.quienEs02}
                 ${store.getState().tarjetachipRecarga.saldo}
             </div>

@@ -166,7 +166,7 @@ export class pantallaTarjetaChipSeleccionTarjetaCredito extends connect(store, M
                 ${idiomas[this.idioma].paginas.general.nombreSistema}
             </div>
             <div id="quienEs">
-                ${store.getState().tarjetachipRecarga.usuario.nombre}
+                ${store.getState().tarjetachipRecarga.usuario ? store.getState().tarjetachipRecarga.usuario.nombre : ""}
                 ${idiomas[this.idioma].paginas.seleccionTarjetaCredito.quienEs01}
                 ${store.getState().tarjetachipRecarga.saldo}
                 ${idiomas[this.idioma].paginas.seleccionTarjetaCredito.quienEs02}

@@ -102,8 +102,7 @@ export class pantallaViandaSeleccionTipoMenu extends connect(store, MODO_PANTALL
             top:0;
             left:0;
             display: grid;
-            grid-template-rows: 10% 8% 15% 12% 35% auto;
-            grid-template-columns: 33% 33% auto;
+            grid-template-rows: 10% 6% 12% 12% 40% auto;
             justify-items:center;
             align-items: center;  
             height: 100vh;
@@ -111,8 +110,6 @@ export class pantallaViandaSeleccionTipoMenu extends connect(store, MODO_PANTALL
         }
         #MenuDescripcion{
             display: grid;
-            grid-column-start: 1;
-            grid-column-end: 4;
             background:-transparent;
             font-size:1rem;
             color:var(--titulo-texto);
@@ -122,8 +119,6 @@ export class pantallaViandaSeleccionTipoMenu extends connect(store, MODO_PANTALL
         }
         #quienEs{
             display: grid;
-            grid-column-start: 1;
-            grid-column-end: 4;
             background-color:transparent;
             font-size:1.8rem;
             color:var(--boton-fondo);
@@ -133,25 +128,28 @@ export class pantallaViandaSeleccionTipoMenu extends connect(store, MODO_PANTALL
         }
         #titulo{
             display: grid;
-            grid-column-start: 1;
-            grid-column-end: 4;
             background-color:transparent;
             font-size:3.5rem;
             color:var(--titulo-texto);;
         }
         #fecha{
             display: grid;
-            grid-column-start: 1;
-            grid-column-end: 4;
             background-color:transparent;
             font-size:2rem;
             color:var(--titulo-texto);;
         }
+        #botonera{
+            display: grid;
+            grid-template-columns: 50% 50%;
+            grid-template-rows: 50% 50%;
+            justify-items:center;
+            align-items: center;  
+            height: 100%;
+            width: 85%;  
+        }        
         #pie{
             display: grid;
-            justify-items: center;
-            grid-column-start: 1;
-            grid-column-end: 4;  
+            justify-items: center; 
             background-color:transparent;
         }
         @keyframes imacolor {
@@ -171,7 +169,7 @@ export class pantallaViandaSeleccionTipoMenu extends connect(store, MODO_PANTALL
             </div>
             <div id="quienEs">
                 ${idiomas[this.idioma].paginas.seleccionTipoMenu.quienEs01}
-                ${store.getState().tarjetachipRecarga.usuario.nombre}
+                ${store.getState().tarjetachipRecarga.usuario ? store.getState().tarjetachipRecarga.usuario.nombre : ""}
                 ${idiomas[this.idioma].paginas.seleccionTipoMenu.quienEs02}
                 ${store.getState().tarjetachipRecarga.saldo}
             </div>
@@ -182,14 +180,11 @@ export class pantallaViandaSeleccionTipoMenu extends connect(store, MODO_PANTALL
                 ${idiomas[this.idioma].paginas.seleccionTipoMenu.dia} 
                 ${this.paraDia}
             </div>
-            <div>
+            <div id="botonera">
                 <input type="button" class="buttonImporte" .item="${tipoMenu[0]}" value="${tipoMenu[0].nombre}" @click="${this.proximaPantalla}">
-            </div>
-            <div>
                 <input type="button" class="buttonImporte" .item="${tipoMenu[1]}" value="${tipoMenu[1].nombre}" @click="${this.proximaPantalla}">
-            </div>
-            <div>
                 <input type="button" class="buttonImporte" .item="${tipoMenu[2]}" value="${tipoMenu[2].nombre}" @click="${this.proximaPantalla}">
+                <input type="button" class="buttonImporte" .item="${tipoMenu[3]}" value="${tipoMenu[3].nombre}" @click="${this.proximaPantalla}">
             </div>
             <div id="pie">
                 <input type="button" class="buttonAtras" value=${idiomas[this.idioma].paginas.general.volver} @click="${this.volver}">

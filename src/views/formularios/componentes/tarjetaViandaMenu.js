@@ -95,10 +95,10 @@ export class tarjetaViandaMenu extends LitElement {
     }
     render() {
         return html`
-        <div id="etiquetaImagen" style="background-image:url('${this.item.url}')"></div>
-        <div id="etiquetaTitulo">${this.item.titulo}</div>
-        <div id="etiquetaPrecio">$${this.item.precio}.-</div>
-        <div id="etiquetaDescripcion">${this.item.descripcion}</div>
+        <div id="etiquetaImagen" style="background-image:url('${this.item ? this.item.url : ""}')"></div>
+        <div id="etiquetaTitulo">${this.item ? this.item.titulo : ""}</div>
+        <div id="etiquetaPrecio">$${this.item ? this.item.precio : ""}.-</div>
+        <div id="etiquetaDescripcion">${this.item ? this.item.descripcion : ""}</div>
         `
     }
     stateChanged(state, name) {

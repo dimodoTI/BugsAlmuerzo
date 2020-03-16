@@ -99,7 +99,7 @@ export class pantallaViandaSeleccionMenu extends connect(store, MODO_PANTALLA)(L
             left:0;
             display: grid;
             grid-template-rows: 5% 5% 10% 65% auto;
-            grid-template-columns: 33% 33% auto;
+            grid-template-columns: 100%;
             justify-items:center;
             align-items: center;  
             height: 100vh;
@@ -107,8 +107,6 @@ export class pantallaViandaSeleccionMenu extends connect(store, MODO_PANTALLA)(L
         }
         #MenuDescripcion{
             display: grid;
-            grid-column-start: 1;
-            grid-column-end: 4;
             background:-transparent;
             font-size:1rem;
             color:var(--titulo-texto);
@@ -118,8 +116,6 @@ export class pantallaViandaSeleccionMenu extends connect(store, MODO_PANTALLA)(L
         }
         #quienEs{
             display: grid;
-            grid-column-start: 1;
-            grid-column-end: 4;
             background-color:transparent;
             font-size:1rem;
             color:var(--boton-fondo);
@@ -129,32 +125,40 @@ export class pantallaViandaSeleccionMenu extends connect(store, MODO_PANTALLA)(L
         }
         #titulo{
             display: grid;
-            grid-column-start: 1;
-            grid-column-end: 4;
             background-color:transparent;
             font-size:3rem;
             color:var(--titulo-texto);;
         }
-        #etiqueta{
-            display: grid;
-            justify-items: center;
+        #etiquetas{
+            justify-items:center;
             align-items: center;  
-            height: 95%;
-            width: 80%;
-            background-color:var(--fondo-etiqueta);
-            border-radius: .5rem;
-            grid-template-rows: 5% 8% 50% 8% auto;
-            grid-template-columns: 100%;
+            height: 100%;             
         }
         #pie{
             display: grid;
             justify-items: center;
-            grid-column-start: 1;
-            grid-column-end: 4;  
             background-color:transparent;
         }
         @keyframes imacolor {
             from{opacity: 0;} to {opacity: 0.7;}
+        }
+        .etiVer3{
+            display:grid;
+            grid-template-columns: 33% auto 33%;
+            width: 100%;            
+        }
+        .etiVer2{
+            display:grid;
+            grid-template-columns: 50% auto;
+            width: 68%;            
+        }
+        .etiVer1{
+            display:grid;
+            grid-template-columns: 100%; 
+            width: 36%;           
+        }
+        .etiNoVer{
+            display:none;
         }
         `
     }
@@ -168,17 +172,26 @@ export class pantallaViandaSeleccionMenu extends connect(store, MODO_PANTALLA)(L
             <div id="MenuDescripcion">
                 ${idiomas[this.idioma].paginas.general.nombreSistema}
             </div>
-            <div id="quienEs">            
-                ${store.getState().tarjetachipRecarga.usuario.nombre}
+            <div id="quienEs">      
+                ${store.getState().tarjetachipRecarga.usuario ? store.getState().tarjetachipRecarga.usuario.nombre : ""}   
                 ${idiomas[this.idioma].paginas.seleccionMenu.quienEs}
                 ${store.getState().tarjetachipRecarga.saldo}
            </div>
             <div id="titulo">
                 ${this.nombreMenu}
             </div>
-            <tarjeta-vianda-nmenu .item="${this.items[0]}" @click="${this.proximaPantalla}"></tarjeta-vianda-nmenu>
-            <tarjeta-vianda-nmenu .item="${this.items[1]}" @click="${this.proximaPantalla}"></tarjeta-vianda-nmenu>
-            <tarjeta-vianda-nmenu .item="${this.items[2]}" @click="${this.proximaPantalla}"></tarjeta-vianda-nmenu>
+            <div id="etiquetas" class="${this.items.length == 3 ? 'etiVer3' : 'etiNoVer'}">
+                <tarjeta-vianda-nmenu .item="${this.items[0]}" @click="${this.proximaPantalla}"></tarjeta-vianda-nmenu>
+                <tarjeta-vianda-nmenu .item="${this.items[1]}" @click="${this.proximaPantalla}"></tarjeta-vianda-nmenu>
+                <tarjeta-vianda-nmenu .item="${this.items[2]}" @click="${this.proximaPantalla}"></tarjeta-vianda-nmenu>
+            </div>
+            <div id="etiquetas" class="${this.items.length == 2 ? 'etiVer2' : 'etiNoVer'}">
+                <tarjeta-vianda-nmenu .item="${this.items[0]}" @click="${this.proximaPantalla}"></tarjeta-vianda-nmenu>
+                <tarjeta-vianda-nmenu .item="${this.items[1]}" @click="${this.proximaPantalla}"></tarjeta-vianda-nmenu>
+            </div>
+            <div id="etiquetas" class="${this.items.length == 1 ? 'etiVer1' : 'etiNoVer'}">
+                <tarjeta-vianda-nmenu .item="${this.items[0]}" @click="${this.proximaPantalla}"></tarjeta-vianda-nmenu>
+            </div>
             <div id="pie">
                 <input type="button" class="buttonAtras" value=${idiomas[this.idioma].paginas.general.volver} @click="${this.volver}">
             </div>

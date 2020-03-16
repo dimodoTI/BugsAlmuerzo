@@ -35,27 +35,21 @@ export const reducer = (state = initialState, action) => {
             newState.correcto = false
             break;
         case INTERPRETAR:
-
             console.log(action.mensaje.split(""))
             action.mensaje.split("").forEach(m => {
 
                 if (newState.fin) {
                     newState.control = m
 
-
                     newState.correcto = LRC(newState.respuesta + ETX) == m
                     newState.respuestaTimeStamp = (new Date()).getTime()
 
                 } else if (m == ETX) {
                     newState.fin = true
-
                 } else {
                     newState.respuesta += m
                 }
-
             })
-
-
             break;
         case INTERPRETAR:
             newState.reintentos += 1

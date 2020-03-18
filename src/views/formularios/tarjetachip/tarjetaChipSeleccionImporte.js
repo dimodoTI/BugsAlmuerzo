@@ -159,6 +159,8 @@ export class pantallaTarjetaChipSeleccionImporte extends connect(store, MODO_PAN
                 ${store.getState().tarjetachipRecarga.usuario ? store.getState().tarjetachipRecarga.usuario.nombre : ""}
                 ${idiomas[this.idioma].paginas.seleccionImporte.quienEs02}
                 ${store.getState().tarjetachipRecarga.saldo}
+
+            
             </div>
             <div id="titulo">
                 ${idiomas[this.idioma].paginas.seleccionImporte.titulo}
@@ -193,6 +195,8 @@ export class pantallaTarjetaChipSeleccionImporte extends connect(store, MODO_PAN
             }
         }
     }
+
+
 
     volver() {
         store.dispatch(modoPantalla("tarjetachiplectura"))

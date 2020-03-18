@@ -107,7 +107,7 @@ export class pantallaViandaSeleccionMenu extends connect(store, MODO_PANTALLA)(L
         }
         #MenuDescripcion{
             display: grid;
-            background:-transparent;
+            background-color:-transparent;
             font-size:1rem;
             color:var(--titulo-texto);
             width:100%;

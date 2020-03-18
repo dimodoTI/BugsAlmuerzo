@@ -181,7 +181,7 @@ export class pantallacargaTarjetaCreditoPosNet extends connect(store, MODO_PANTA
                 ${idiomas[this.idioma].paginas.cargaPosNet.titulo}
             </div>
             <div class="contenedor">
-                <div id="tarjeta" imagen="${this.tarjeta}" @click="${this.proximaPantalla}">
+                <div id="tarjeta" style="background-image:url('${this.tarjeta.url}')" @click="${this.proximaPantalla}">
                 </div>
             </div>
             <div id="descripcion">

@@ -13,6 +13,8 @@ import { modoPantalla, dispararTimer } from "../../../redux/actions/ui";
 import { guardarTarjetaCreditoRecarga } from "../../../redux/actions/tarjetachipRecarga";
 import { idiomas } from "../../../redux/datos/tarjetachip/idioma/idiomas"
 import { tiempos } from "../../../redux/datos/tarjetachip/datos/tiempoEspera"
+import { tarjetas } from "../../../redux/datos/tarjetachip/datos/tarjetas"
+
 
 const MODO_PANTALLA = "ui.timeStampPantalla"
 export class pantallaTarjetaChipSeleccionTarjetaCredito extends connect(store, MODO_PANTALLA)(LitElement) {
@@ -79,8 +81,8 @@ export class pantallaTarjetaChipSeleccionTarjetaCredito extends connect(store, M
             top:0;
             left:0;
             display: grid;
-            grid-template-rows: 10% 8% 20% 37% auto;
-            grid-template-columns: 33% 33% auto;
+            grid-template-rows: 10vh 8vh 20vh 45vh auto;
+            grid-template-columns: 100%;
             justify-items:center;
             align-items: center;  
             height: 100vh;
@@ -88,8 +90,6 @@ export class pantallaTarjetaChipSeleccionTarjetaCredito extends connect(store, M
         }
         #MenuDescripcion{
             display: grid;
-            grid-column-start: 1;
-            grid-column-end: 4;
             background-color:transparent;
             font-size:1rem;
             color:var(--titulo-texto);
@@ -99,8 +99,6 @@ export class pantallaTarjetaChipSeleccionTarjetaCredito extends connect(store, M
         }
         #quienEs{
             display: grid;
-            grid-column-start: 1;
-            grid-column-end: 4;
             background-color:transparent;
             font-size:1.8rem;
             color:var(--boton-fondo);
@@ -110,45 +108,38 @@ export class pantallaTarjetaChipSeleccionTarjetaCredito extends connect(store, M
         }
         #titulo{
             display: grid;  
-            grid-column-start: 1;
-            grid-column-end: 4;
             background-color:transparent;
             font-size:3.5rem;
             color:var(--titulo-texto);;
         }
-        #tvisa{
-            background-image:var(--tarjeta-visa-credito);
-        }
-        #tmaster{
-            background-image:var(--tarjeta-master-credito);
-        }
-        #tamex{
-            background-image:var(--tarjeta-amex-credito);
-        }
-        .t-credito{
-            display: grid;
-            height: 50%;
-            width: 50%;            
-            background-repeat: no-repeat;
-            background-position: center;
-            background-size: 12rem 7.5rem;
-            box-shadow:var(--shadow-elevation-8-box);
-            background-color:#2478bc;
-            border-radius: 8%;
-       }
         #pie{
             display: grid;
-            justify-items: center;
-            grid-column-start: 1;
-            grid-column-end: 4;  
+            justify-items: center;  
             background-color:transparent;
         }
-        .contenedor{
+        #tarjetasDIV{
             display: grid;
+            grid-template-columns: auto auto auto auto auto;
+            grid-gap: .2rem;
             justify-items: center;
             align-items: center;  
             height: 100%;
-            width: 100%;            
+            width: 100%;             
+        }
+        .contenedor{ 
+            display: grid;
+            justify-items: center;
+            align-items: center; 
+        }
+        .t-credito{
+            height: calc(45vh/2.7);
+            width: calc(45vh/2.7*1.6);
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: calc(45vh/2.7*1.6) calc(45vh/2.7);
+            box-shadow:var(--shadow-elevation-8-box);
+            background-color:#2478bc;
+            border-radius: 8%;
         }
         @keyframes imacolor {
             from{opacity: 0;} to {opacity: 0.8;}
@@ -156,7 +147,8 @@ export class pantallaTarjetaChipSeleccionTarjetaCredito extends connect(store, M
         `
     }
     render() {
-        return html`
+        return html
+            `
         <div id="fondoimagen01">
         </div>
         <div id="fondocolor">
@@ -175,24 +167,21 @@ export class pantallaTarjetaChipSeleccionTarjetaCredito extends connect(store, M
             <div id="titulo">
                 ${idiomas[this.idioma].paginas.seleccionTarjetaCredito.titulo}
             </div>
-            <div class="contenedor">
-                <div id="tvisa" .tarjeta="${"visaCredito"}" class="t-credito" @click="${this.proximaPantalla}">
-                </div>
-            </div>
-            <div class="contenedor">
-                <div id="tmaster" .tarjeta="${"masterCredito"}" class="t-credito" @click="${this.proximaPantalla}">
-                </div>
-            </div>
-            <div class="contenedor">
-                <div id="tamex" .tarjeta="${"amexCredito"}" class="t-credito" @click="${this.proximaPantalla}">
-                </div>
+            <div id="tarjetasDIV">
+                    ${tarjetas.map(tarjeta => {
+                return html
+                    `
+                    <div class="contenedor">
+                    <div class="t-credito" .tarjeta="${tarjeta}" style="background-image:url('${tarjeta.url}')" @click="${this.proximaPantalla}"></div>
+                    </div>
+                    `
+            })}
             </div>
             <div id="pie">
                 <input type="button" class="buttonAtras" value=${idiomas[this.idioma].paginas.general.volver} @click="${this.volver}">
             </div>
-        </div>
+        </div >
         `
-
     }
     stateChanged(state, name) {
         if (name == MODO_PANTALLA && state.ui.quePantalla == "tarjetachipselecciontarjetacredito") {
@@ -219,6 +208,5 @@ export class pantallaTarjetaChipSeleccionTarjetaCredito extends connect(store, M
         store.dispatch(guardarTarjetaCreditoRecarga(e.currentTarget.tarjeta))
         store.dispatch(modoPantalla("cargatarjetacreditoposnet"))
     }
-
 }
 window.customElements.define("pantalla-tarjetachipselecciontarjetacredito", pantallaTarjetaChipSeleccionTarjetaCredito);

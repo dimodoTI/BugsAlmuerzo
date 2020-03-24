@@ -6,10 +6,13 @@ export const MEDIA_SIZE_CHANGE = "[ui] media size change";
 export const MEDIA_ORIENTATION_CHANGE = "[ui] media orientation change";
 export const LOGGED = "[ui] LOGGED"
 export const MODO_PANTALLA = "[ui] MODO_PANTALLA"
+export const ERROR_TITULO = "[ui] ERROR_TITULO"
+export const ERROR_MENSAJE = "[ui] ERROR_MENSAJE"
 export const DISPARAR_TIMER = "[ui] DISPARAR_TIMER"
 export const CANCELAR_TIMER = "[ui] CANCELAR_TIMER"
 export const SET_TIMER = "[ui] SET_TIMER"
 export const SET_CONTADOR = "[ui] SET_CONTADOR"
+export const MOSTRAR_ERROR = "[ui] MOSTRAR_ERROR"
 
 
 export const showSpinner = () => ({
@@ -54,6 +57,14 @@ export const modoPantalla = (quePantalla) => ({
   type: MODO_PANTALLA,
   quePantalla: quePantalla
 });
+export const errorTitulo = (errorTitulo) => ({
+  type: ERROR_TITULO,
+  errorTitulo: errorTitulo
+});
+export const errorMensaje = (errorMensaje) => ({
+  type: ERROR_MENSAJE,
+  errorMensaje: errorMensaje
+});
 export const dispararTimer = (tiempo, target, pantallaQueLLamo) => ({
   type: DISPARAR_TIMER,
   tiempo: tiempo,
@@ -73,4 +84,11 @@ export const cancelarTimer = () => ({
 export const setContador = (tiempo) => ({
   type: SET_CONTADOR,
   tiempo: tiempo
+});
+export const mostrarError = (titulo, mensaje, target, pantallaQueLLamo) => ({
+  type: MOSTRAR_ERROR,
+  titulo: titulo,
+  mensaje: mensaje,
+  target: target,
+  pantallaQueLLamo: pantallaQueLLamo
 });

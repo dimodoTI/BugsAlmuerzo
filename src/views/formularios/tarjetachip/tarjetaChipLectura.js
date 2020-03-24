@@ -208,7 +208,10 @@ export class pantallaTarjetaChipLectura extends connect(store, MODO_PANTALLA)(Li
     volver() {
         store.dispatch(modoPantalla("inicio"))
     }
-
+    volver() {
+        store.dispatch(modoPantalla("inicio"))
+    }
+    
     proximaPantalla() {
         store.dispatch(guardarImporteSaldo(120))
         store.dispatch(guardarUsuario({ id: 1, nombre: "Sergio Ferro" }))

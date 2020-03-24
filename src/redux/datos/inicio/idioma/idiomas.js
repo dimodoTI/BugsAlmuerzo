@@ -3,7 +3,11 @@ export const idiomas = {
         paginas:
         {
             inicio: { bienvenido: "Bienvenido", heceTuPedido: "Hace tu pedido de comida", cargaCredito: "Carga credito en tu tarjeta chip" },
-            mensajeEspera: { mensaje: "Tiempo de espera agotado. Continua?", si: "Si", no: "No" }
+            mensajeEspera: { mensaje: "Tiempo de espera agotado. Continua?", si: "Si", no: "No" },
+            eTituloFueraDeLinea: { mensaje: "A T E N C I O N" },
+            eMensajeFueraDeLinea: { mensaje: "Equipo Fuera de Servicio" },
+            eTituloTarjetachipLectura: { mensaje: "ERROR" },
+            eMensajeTarjetachipLectura: { mensaje: "TarjetaChip No Leida" }
         }
     }
 

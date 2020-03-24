@@ -53,7 +53,11 @@ export class cuentaRegresiva extends connect(store, MODO_PANTALLA, TIEMPO)(LitEl
             this.update()
         }
         if (name == MODO_PANTALLA) {
-            this.hidden = state.ui.quePantalla == "inicio"
+            if (state.ui.quePantalla == "inicio" || state.ui.quePantalla == "fueralinea") {
+                this.hidden = true
+            } else {
+                this.hidden = false
+            }
             this.update()
         }
     }

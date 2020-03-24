@@ -15,6 +15,11 @@ import {
 } from "../../assets/icons/icons"
 import { conectar } from "../redux/actions/servidorBugs";
 import { pantallaInicio } from "../views/formularios/inicio/inicio"
+import { cuentaRegresiva } from "../views/formularios/componentes/cuentaRegresiva"
+import { mensajeEspera } from "../views/formularios/componentes/mensajeEspera"
+import { pantallaMensajeError } from "../views/formularios/inicio/mensajeError"
+import { pantallaMensajeFueraLinea } from "../views/formularios/inicio/mensajeFueraLinea"
+
 import { pantallaTarjetaChipLectura } from "../views/formularios/tarjetachip/tarjetaChipLectura"
 import { pantallaTarjetaChipSeleccionImporte } from "../views/formularios/tarjetachip/tarjetaChipSeleccionImporte"
 import { pantallaTarjetaChipSeleccionTarjetaCredito } from "../views/formularios/tarjetachip/tarjetachipSeleccionTarjetaCredito"
@@ -27,8 +32,6 @@ import { pantallaViandaSeleccionMenu } from "../views/formularios/vianda/viandaS
 import { pantallaViandaMenuAceptacion } from "../views/formularios/vianda/viandaMenuAceptacion"
 import { pantallaViandaMenuExito } from "../views/formularios/vianda/viandaMenuExito"
 
-import { cuentaRegresiva } from "../views/formularios/componentes/cuentaRegresiva"
-import { mensajeEspera } from "../views/formularios/componentes/mensajeEspera"
 import { connect } from "@brunomon/helpers/connect";
 
 const QUEPANTALLA = "ui.timeStampPantalla"
@@ -59,6 +62,8 @@ export class viewManager extends connect(store, QUEPANTALLA)(LitElement) {
             `
         <cuenta-regresiva></cuenta-regresiva>
         <mensaje-espera id="mensajeespera"></mensaje-espera>
+        <pantalla-mensajeerror id="mensajeerror"></pantalla-mensajeerror>
+        <pantalla-mensajefueralinea id="fueralinea"></pantalla-mensajefueralinea>
 
         <pantalla-inicio id="inicio"></pantalla-inicio>
         <pantalla-tarjetachiplectura id="tarjetachiplectura"></pantalla-tarjetachiplectura>
@@ -85,8 +90,9 @@ export class viewManager extends connect(store, QUEPANTALLA)(LitElement) {
     }
     stateChanged(state, name) {
         if (name == QUEPANTALLA) {
-            if (state.ui.quePantalla != "mensajeespera") {
+            if (state.ui.quePantalla != "mensajeespera" && state.ui.quePantalla != "error" && state.ui.quePantalla != "fueralinea") {
                 this.shadowRoot.querySelector("#inicio").hidden = state.ui.quePantalla != "inicio"
+
                 this.shadowRoot.querySelector("#tarjetachiplectura").hidden = state.ui.quePantalla != "tarjetachiplectura"
                 this.shadowRoot.querySelector("#tarjetachipseleccionimporte").hidden = state.ui.quePantalla != "tarjetachipseleccionimporte"
                 this.shadowRoot.querySelector("#tarjetachipselecciontarjetacredito").hidden = state.ui.quePantalla != "tarjetachipselecciontarjetacredito"
@@ -99,7 +105,10 @@ export class viewManager extends connect(store, QUEPANTALLA)(LitElement) {
                 this.shadowRoot.querySelector("#viandamenuaceptacion").hidden = state.ui.quePantalla != "viandamenuaceptacion"
                 this.shadowRoot.querySelector("#viandamenuexito").hidden = state.ui.quePantalla != "viandamenuexito"
             }
+            this.shadowRoot.querySelector("#fueralinea").hidden = state.ui.quePantalla != "fueralinea"
             this.shadowRoot.querySelector("#mensajeespera").hidden = state.ui.quePantalla != "mensajeespera"
+            this.shadowRoot.querySelector("#mensajeerror").hidden = state.ui.quePantalla != "error"
+
             this.update()
         }
     }

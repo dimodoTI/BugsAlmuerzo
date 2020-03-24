@@ -8,6 +8,7 @@ html {
     /* inicio */
     --imagen-pantalla-fondo01: url("../assets/images/inicio/fondo_01.png");
     --imagen-pantalla-fondo02: url("../assets/images/inicio/fondo_02.png");
+    --imagen-fuera-servicio: url("../assets/images/inicio/fuera_servicio.png");
     /* tarjetachip */
     --imagen-pantalla-fondo-tarjetachip: url("../assets/images/tarjetachip/fondo-tarjeta_01.png");
     --imagen-pantalla-boquilla-tarjetachip: url("../assets/images/tarjetachip/boquilla.png");

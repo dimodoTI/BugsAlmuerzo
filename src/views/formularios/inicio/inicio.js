@@ -9,7 +9,7 @@ import {
 import {
     connect
 } from "@brunomon/helpers";
-import { modoPantalla, cancelarTimer } from "../../../redux/actions/ui";
+import { modoPantalla, cancelarTimer, errorTitulo, errorMensaje } from "../../../redux/actions/ui";
 import { idiomas } from "../../../redux/datos/inicio/idioma/idiomas";
 import { ejecutarComando } from "../../../redux/actions/posNet";
 
@@ -135,7 +135,7 @@ export class pantallaInicio extends connect(store, MODO_PANTALLA)(LitElement) {
         <div id="fondocolor">
         </div>
         <div id="fondocuerpo">
-            <div id="titulo">
+            <div id="titulo" @click="${this.error}">
                 ${idiomas[this.idioma].paginas.inicio.bienvenido}
             </div>
             <div style="background-color:transparent;">
@@ -173,5 +173,8 @@ export class pantallaInicio extends connect(store, MODO_PANTALLA)(LitElement) {
         store.dispatch(modoPantalla(e.currentTarget.getAttribute("opcion")))
     }
 
+    error(e) {
+        store.dispatch(modoPantalla("fueralinea"))
+    }
 }
 window.customElements.define("pantalla-inicio", pantallaInicio);

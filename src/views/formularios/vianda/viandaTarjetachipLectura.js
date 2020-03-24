@@ -9,9 +9,10 @@ import {
 import {
     connect
 } from "@brunomon/helpers";
-import { modoPantalla, dispararTimer } from "../../../redux/actions/ui";
+import { modoPantalla, dispararTimer, errorTitulo, errorMensaje, mostrarError } from "../../../redux/actions/ui";
 import { guardarUsuario, guardarImporteSaldo, guardarImporteRecarga } from "../../../redux/actions/tarjetachipRecarga";
 import { idiomas } from "../../../redux/datos/vianda/idioma/idiomas"
+import { idiomas as idiomaInicio } from "../../../redux/datos/inicio/idioma/idiomas"
 import { tiempos } from "../../../redux/datos/vianda/datos/tiempoEspera"
 
 const MODO_PANTALLA = "ui.timeStampPantalla"
@@ -169,7 +170,7 @@ export class pantallaViandaTarjetaChipLectura extends connect(store, MODO_PANTAL
         <div id="fondocolor">
         </div>
         <div id="fondocuerpo">
-            <div id="MenuDescripcion">
+            <div id="MenuDescripcion"  @click="${this.errorC}">
             ${idiomas[this.idioma].paginas.general.nombreSistema}
             </div>
             <div id="titulo">
@@ -203,6 +204,10 @@ export class pantallaViandaTarjetaChipLectura extends connect(store, MODO_PANTAL
                 reflect: true
             }
         }
+    }
+
+    errorC() {
+        store.dispatch(mostrarError(idiomaInicio[this.idioma].paginas.eTituloTarjetachipLectura, idiomaInicio[this.idioma].paginas.eMensajeTarjetachipLectura, "error", "viandatarjetachiplectura"))
     }
 
     volver() {

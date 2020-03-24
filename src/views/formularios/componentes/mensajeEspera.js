@@ -129,6 +129,10 @@ export class mensajeEspera extends connect(store, MODO_PANTALLA)(LitElement) {
             store.dispatch(dispararTimer(tiempos.mensajeespera.segundos, "inicio"))
             this.pantallaQueLLamo = state.ui.pantallaQueLLamo;
         }
+        // if (name == MODO_PANTALLA && state.ui.quePantalla == "error") {
+        //     store.dispatch(dispararTimer(tiempos.error.segundos, "inicio"))
+        //     this.pantallaQueLLamo = state.ui.pantallaQueLLamo;
+        // }
     }
 
     static get properties() {

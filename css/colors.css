@@ -9,5 +9,6 @@ html{
     --titulo-texto:hsl(0, 0%, 95%);
     --texto-oscuro:#646473;
     --fondo-etiqueta:#ececec;
-    --color-precio:#b12121;
+    --color-precio:#b12121;    
+    --color-error:#ec0404;
 }

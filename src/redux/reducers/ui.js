@@ -7,9 +7,12 @@ import {
     MEDIA_ORIENTATION_CHANGE,
     LOGGED,
     MODO_PANTALLA,
+    ERROR_TITULO,
+    ERROR_MENSAJE,
     CANCELAR_TIMER,
     SET_TIMER,
-    SET_CONTADOR
+    SET_CONTADOR,
+    MOSTRAR_ERROR
 } from "../actions/ui";
 
 const initialState = {
@@ -20,6 +23,8 @@ const initialState = {
     mediaOrientation: null,
     logged: "out",
     timeStampPantalla: null,
+    errorTitulo: "",
+    errorMensaje: "",
     quePantalla: null,
     timer: null,
     intervalo: null,
@@ -60,6 +65,12 @@ export const reducer = (state = initialState, action) => {
             newState.timeStampPantalla = (new Date()).getTime()
             newState.quePantalla = action.quePantalla
             break;
+        case ERROR_TITULO:
+            newState.errorTitulo = action.errorTitulo
+            break;
+        case ERROR_MENSAJE:
+            newState.errorMensaje = action.errorMensaje
+            break;
         case SET_TIMER:
             if (newState.timer) clearTimeout(newState.timer)
             if (newState.intervalo) clearInterval(newState.intervalo)
@@ -74,6 +85,10 @@ export const reducer = (state = initialState, action) => {
             break;
         case SET_CONTADOR:
             if (newState.tiempo > 0) newState.tiempo -= 1
+            break;
+        case MOSTRAR_ERROR:
+            newState.errorTitulo = action.titulo
+            newState.errorMensaje = action.mensaje
             break;
     }
     return newState;

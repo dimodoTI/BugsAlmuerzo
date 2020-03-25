@@ -1,6 +1,24 @@
-import { POST, LECTORLED } from "../datos/inicio/datos/dispositivos"
-import { COMANDO, ejecutarComando, reintentoComando, COMANDO_TEST, INTERPRETAR } from "../actions/posNet";
-import { enviarMensaje as operadoraEnviar } from "../actions/operadora"
+import {
+    POST
+} from "../datos/inicio/datos/dispositivos"
+import {
+    COMANDO,
+    ejecutarComando,
+    reintentoComando,
+    interpretar,
+    COMANDO_TEST,
+    INTERPRETAR
+} from "../actions/posNet";
+import {
+    enviarMensaje as operadoraEnviar
+} from "../actions/operadora"
+import {
+    showError
+} from "../actions/ui";
+import {
+    store
+} from "../store"
+
 
 const ACK = String.fromCharCode(6)
 const NACK = String.fromCharCode(21)
@@ -14,48 +32,69 @@ export const test = ({
     next(action);
     if (action.type === COMANDO_TEST) {
 
+        const timeOut = setTimeout(() => {
+            dispatch(interpretar("fallo"))
+        }, 3000)
+        dispatch(ejecutarComando(0, timeOut))
+
     }
 };
 
-export const interpretar = ({
+export const interpretarProccess = ({
+
     dispatch
+
 }) => next => action => {
     next(action);
     if (action.type === INTERPRETAR) {
-
-        /* if (action.mensaje != ACK) {
-            if (store.getState().posNet.intentos < 3) {
-                setTimeout(function () {
-                    dispatch(reintentoComando(store.getState().posNet.ultimoComando))
-                }, 10000)
+        const ultimo = store.getState().postNet.ultimoComando
+        if (store.getState().postNet.finDeMensaje) {
+            if (action.mensaje == "fallo" || !store.getState().postNet.correcto) {
+                if (store.getState().postNet.reintentos < 3) {
+                    const espera = setTimeout(() => {
+                        const timeOut = setTimeout(() => {
+                            dispatch(interpretar("fallo"))
+                        }, 3000)
+                        dispatch(ejecutarComando(ultimo, timeOut))
+                    }, 10000)
+                } else {
+                    dispatch(showError("El posNet no responde"))
+                }
             } else {
-                //// disparar Accion de Error
-            }
-        } else {
-            //// Disprar Accion de Todo Ok
-        } */
-    }
-};
 
-export const operadoraEjecutarComando = ({
+                if (ultimo < store.getState().postNet.comandos.length - 1) {
+                    // si espera respuesta pongo el timeout
+                    if (store.getState().postNet.comandos[ultimo + 1].respuesta) {
+                        const timeOut = setTimeout(() => {
+                            dispatch(interpretar("fallo"))
+                        }, 3000)
+
+
+                        dispatch(ejecutarComando(ultimo + 1, timeOut))
+                    } else {
+
+
+                        dispatch(ejecutarComando(ultimo + 1))
+                    }
+                }
+
+            }
+        }
+    }
+}
+
+
+export const ejecutarComandoProcces = ({
+
     dispatch
 }) => next => action => {
     next(action);
     if (action.type === COMANDO) {
-        const LRC = texto => {
-            let a = 0
-            for (let i = 0; i < texto.length; i++) {
-                a = a ^ (texto.substr(i, 1).charCodeAt(0))
-
-            }
-            return String.fromCharCode(a & 255)
-        }
-        dispatch(operadoraEnviar("#" + POST + "#" + ENQ))
-        setTimeout(function () { dispatch(operadoraEnviar("#" + POST + "#" + STX + action.comando + ETX + LRC(action.comando + ETX))) }, 5000)
-        setTimeout(function () { dispatch(operadoraEnviar("#" + POST + "#" + ACK)) }, 1000)
+        dispatch(operadoraEnviar(store.getState().postNet.comandos[action.comando].comando))
     }
 };
 
 
 
-export const middleware = [operadoraEjecutarComando, interpretar, test]
+
+export const middleware = [ejecutarComandoProcces, interpretarProccess, test]

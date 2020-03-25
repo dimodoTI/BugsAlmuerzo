@@ -9,9 +9,18 @@ import {
 import {
     connect
 } from "@brunomon/helpers";
-import { modoPantalla, cancelarTimer, errorTitulo, errorMensaje } from "../../../redux/actions/ui";
-import { idiomas } from "../../../redux/datos/inicio/idioma/idiomas";
-import { ejecutarComando } from "../../../redux/actions/posNet";
+import {
+    modoPantalla,
+    cancelarTimer,
+    errorTitulo,
+    errorMensaje
+} from "../../../redux/actions/ui";
+import {
+    idiomas
+} from "../../../redux/datos/inicio/idioma/idiomas";
+import {
+    comandoTest
+} from "../../../redux/actions/posNet";
 
 const MODO_PANTALLA = "ui.timeStampPantalla"
 export class pantallaInicio extends connect(store, MODO_PANTALLA)(LitElement) {
@@ -22,7 +31,7 @@ export class pantallaInicio extends connect(store, MODO_PANTALLA)(LitElement) {
     }
 
     static get styles() {
-        return css`
+        return css `
         :host{
             position:relative;
             height: 100vh;
@@ -127,7 +136,7 @@ export class pantallaInicio extends connect(store, MODO_PANTALLA)(LitElement) {
         `
     }
     render() {
-        return html`
+        return html `
         <div id="fondoimagen01">
         </div>
         <div id="fondoimagen02">
@@ -152,7 +161,7 @@ export class pantallaInicio extends connect(store, MODO_PANTALLA)(LitElement) {
     }
 
     test() {
-        store.dispatch(ejecutarComando("TES" + String.fromCharCode(0) + String.fromCharCode(0), 10))
+        store.dispatch(comandoTest())
     }
     stateChanged(state, name) {
         if (name == MODO_PANTALLA && state.ui.quePantalla == "inicio") {

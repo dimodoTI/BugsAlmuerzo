@@ -40,8 +40,7 @@ export const reintentoComando = (comando, timeOut) => ({
     timeOut: timeOut
 })
 
-export const comandoTest = (timeOut) => ({
-    type: COMANDO_TEST,
-    timeOut: timeOut
-})
+export const comandoTest = () => ({
+    type: COMANDO_TEST
 
+})

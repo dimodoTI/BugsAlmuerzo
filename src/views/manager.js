@@ -59,8 +59,7 @@ export class viewManager extends connect(store, QUEPANTALLA)(LitElement) {
     }
     render() {
         return html
-            `
-        <cuenta-regresiva></cuenta-regresiva>
+            `<cuenta-regresiva></cuenta-regresiva>
         <mensaje-espera id="mensajeespera"></mensaje-espera>
         <pantalla-mensajeerror id="mensajeerror"></pantalla-mensajeerror>
         <pantalla-mensajefueralinea id="fueralinea"></pantalla-mensajefueralinea>
@@ -76,9 +75,7 @@ export class viewManager extends connect(store, QUEPANTALLA)(LitElement) {
         <pantalla-viandaselecciontipomenu id="viandaselecciontipomenu"></pantalla-viandaselecciontipomenu>
         <pantalla-viandaseleccionmenu id="viandaseleccionmenu"></pantalla-viandaseleccionmenu>
         <pantalla-viandamenuaceptacion id="viandamenuaceptacion"></pantalla-viandamenuaceptacion>
-        <pantalla-viandamenuexito id="viandamenuexito"></pantalla-viandamenuexito>
-    
-        `
+        <pantalla-viandamenuexito id="viandamenuexito"></pantalla-viandamenuexito>`
     }
 
     conectar() {

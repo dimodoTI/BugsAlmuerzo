@@ -73,7 +73,9 @@ export const reducer = (state = initialState, action) => {
             }
             newState.ultimoComando = action.comando
             newState.ultimoTimeOut = action.timeOut
-            newState.respuesta = ""
+            if (newState.comandos[action.comando].respuesta) {
+                newState.respuesta = ""
+            }
             newState.control = ""
             newState.fin = false
             newState.correcto = false
@@ -87,7 +89,6 @@ export const reducer = (state = initialState, action) => {
                 newState.ultimoTimeOut = 0
                 //Armo el mensaje y compruebo el DV final y limpio el timeOut cuando termino el mensaje.
                 action.mensaje.split("").forEach(m => {
-
                     // si tiene DV lo toma y verifica
                     if (newState.fin) {
                         newState.control = m
@@ -100,7 +101,6 @@ export const reducer = (state = initialState, action) => {
                         //si es igual a la respuesta esperada
                         if (newState.comandos[newState.ultimoComando].respuesta == m) {
                             // si no espera DV termina el mensaje
-
                             if (!newState.comandos[newState.ultimoComando].verificado) {
                                 newState.correcto = true
                                 newState.respuestaTimeStamp = (new Date()).getTime()

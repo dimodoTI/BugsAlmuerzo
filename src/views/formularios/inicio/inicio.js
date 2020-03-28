@@ -19,7 +19,9 @@ import {
     idiomas
 } from "../../../redux/datos/inicio/idioma/idiomas";
 import {
-    comandoTest
+    comandoTest,
+    comandoVenta,
+    comandoCierre
 } from "../../../redux/actions/posNet";
 
 const MODO_PANTALLA = "ui.timeStampPantalla"
@@ -59,11 +61,11 @@ export class pantallaInicio extends connect(store, MODO_PANTALLA)(LitElement) {
             margin: 1rem .5rem;
             cursor: pointer;
             box-shadow:var(--shadow-elevation-8-box);
-            animation-duration: 20s;
+            /* animation-duration: 20s;
         	animation-timing-function: ease-in-out;
             animation-delay: 1s;
             animation-iteration-count: infinite;          
-            animation-name: aniBoton;
+            animation-name: aniBoton; */
         }
         #fondoimagen01{
             position:absolute;
@@ -154,7 +156,9 @@ export class pantallaInicio extends connect(store, MODO_PANTALLA)(LitElement) {
                 <input type="button" class="button" opcion="tarjetachiplectura" value=${idiomas[this.idioma].paginas.inicio.cargaCredito} @click="${this.proximaPantalla}">
             </div>
             <div style="background-color:var(--pantalla-fondo);">
-            <input type="button" class="button"  @click="${this.test}">
+            <input type="button" class="button" value="test"  @click="${this.test}">
+            <input type="button" class="button" value="venta" @click="${this.venta}">
+            <input type="button" class="button" value="cierre" @click="${this.cierre}">
             </div>        
         </div>
         `
@@ -163,6 +167,24 @@ export class pantallaInicio extends connect(store, MODO_PANTALLA)(LitElement) {
     test() {
         store.dispatch(comandoTest())
     }
+    venta() {
+        store.dispatch(comandoVenta({
+            monto: 1,
+            numeroFactura: 10000008901,
+            cuotas: 1,
+            codigoTarjeta: "VI",
+            codigoPlan: "0",
+            montoPropina: 0,
+            codigoComercio: "03659307",
+            nombreComercio: "PRISMA MP",
+            cuitComercio: "30-59891004-5",
+            modo: 1
+        }))
+    }
+    cierre() {
+        store.dispatch(comandoCierre())
+    }
+
     stateChanged(state, name) {
         if (name == MODO_PANTALLA && state.ui.quePantalla == "inicio") {
             store.dispatch(cancelarTimer())

@@ -1,20 +1,14 @@
 import {
     COMANDO,
     INTERPRETAR,
-    COMANDO_TEST
+    COMANDO_TEST,
+    COMANDO_VENTA,
+    COMANDO_CIERRE
 } from "../actions/posNet";
 
 import {
-    POST
-} from "../datos/inicio/datos/dispositivos"
-
-const ACK = String.fromCharCode(6)
-const NACK = String.fromCharCode(21)
-const ENQ = String.fromCharCode(5)
-const STX = String.fromCharCode(2)
-const ETX = String.fromCharCode(3)
-
-const TEST = "TES" + String.fromCharCode(0) + String.fromCharCode(0)
+    LRC
+} from "../datos/posNet/constantes"
 
 const initialState = {
     respuesta: "",
@@ -25,19 +19,13 @@ const initialState = {
     finDeMensaje: false,
     ultimoComando: null,
     ultimoTimeOut: null,
+    operadorTimeOut: null,
+    finTimeOut: null,
     reintentos: 0,
     comandos: []
 
 };
-const LRC = texto => {
-    let a = 0
-    for (let i = 0; i < texto.length; i++) {
-        a = a ^ (texto.substr(i, 1).charCodeAt(0))
-        //console.log(texto.substr(i, 1).charCodeAt(0))
-    }
-    //console.log(String.fromCharCode(a & 255))
-    return String.fromCharCode(a & 255)
-}
+
 export const reducer = (state = initialState, action) => {
     const newState = {
         ...state
@@ -45,27 +33,14 @@ export const reducer = (state = initialState, action) => {
 
     switch (action.type) {
         case COMANDO_TEST:
+        case COMANDO_VENTA:
+        case COMANDO_CIERRE:
             newState.reintentos = 0
             newState.respuesta = ""
             newState.control = ""
             newState.fin = false
             newState.correcto = false
-            newState.comandos = [{
-                    comando: "#" + POST + "#" + ENQ,
-                    respuesta: ACK,
-                    verificado: false
-                },
-                {
-                    comando: "#" + POST + "#" + STX + TEST + ETX + LRC(TEST + ETX),
-                    respuesta: ETX,
-                    verificado: true
-                },
-                {
-                    comando: "#" + POST + "#" + ACK,
-                    respuesta: null,
-                    verificado: false
-                }
-            ]
+            newState.comandos = action.comandos
             break;
         case COMANDO:
             if (newState.ultimoComando != action.comando) {
@@ -73,7 +48,8 @@ export const reducer = (state = initialState, action) => {
             }
             newState.ultimoComando = action.comando
             newState.ultimoTimeOut = action.timeOut
-            if (newState.comandos[action.comando].respuesta) {
+            newState.operadorTimeOut = action.operadorTimeOut
+            if (newState.comandos[action.comando].fin) {
                 newState.respuesta = ""
             }
             newState.control = ""
@@ -82,12 +58,9 @@ export const reducer = (state = initialState, action) => {
             newState.finDeMensaje = false
             break;
         case INTERPRETAR:
-
             // si no es un timeout
             if (action.mensaje != "fallo") {
-                window.clearTimeout(newState.ultimoTimeOut)
-                newState.ultimoTimeOut = 0
-                //Armo el mensaje y compruebo el DV final y limpio el timeOut cuando termino el mensaje.
+                //Armo el mensaje y compruebo el DV final.
                 action.mensaje.split("").forEach(m => {
                     // si tiene DV lo toma y verifica
                     if (newState.fin) {
@@ -99,11 +72,10 @@ export const reducer = (state = initialState, action) => {
                         //encadena el siguiente caracter
                         newState.respuesta += m
                         //si es igual a la respuesta esperada
-                        if (newState.comandos[newState.ultimoComando].respuesta == m) {
+                        if (newState.comandos[newState.ultimoComando].fin == m) {
                             // si no espera DV termina el mensaje
                             if (!newState.comandos[newState.ultimoComando].verificado) {
                                 newState.correcto = true
-                                newState.respuestaTimeStamp = (new Date()).getTime()
                                 newState.finDeMensaje = true
                                 newState.fin = false
                             } else {

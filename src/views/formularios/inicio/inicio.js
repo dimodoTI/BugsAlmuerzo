@@ -23,6 +23,9 @@ import {
     comandoVenta,
     comandoCierre
 } from "../../../redux/actions/posNet";
+import {
+    leer
+} from "../../../redux/actions/tarjetaChip";
 
 const MODO_PANTALLA = "ui.timeStampPantalla"
 export class pantallaInicio extends connect(store, MODO_PANTALLA)(LitElement) {
@@ -30,6 +33,7 @@ export class pantallaInicio extends connect(store, MODO_PANTALLA)(LitElement) {
         super();
         this.hidden = false
         this.idioma = "ES"
+        this.testing = true
     }
 
     static get styles() {
@@ -48,6 +52,10 @@ export class pantallaInicio extends connect(store, MODO_PANTALLA)(LitElement) {
         :host([hidden]){
             display: none; 
         }
+        :host(:not([testing])) .botoneraTest{
+            display: none; 
+        }
+        
         .button {
             border-radius: 2rem;
             background-color: var(--boton-fondo);
@@ -135,7 +143,23 @@ export class pantallaInicio extends connect(store, MODO_PANTALLA)(LitElement) {
             70%, 84% { font-size: 3.4rem;}
             84%, 100% { font-size: 3rem;}
         }
-        `
+
+        .botoneraTest{
+            display:grid;
+            grid-auto-flow:row;
+            align-content:flex-start;
+            position:absolute;
+            top:0;
+            left:0;
+            height:100vh;
+            background-color:rgba(0,0,0,.5)
+        }
+        .botoneraTest .button{
+            font-size:1rem;
+            background-color:#f6f6f6
+        }
+       
+               `
     }
     render() {
         return html `
@@ -155,11 +179,14 @@ export class pantallaInicio extends connect(store, MODO_PANTALLA)(LitElement) {
             <div style="background-color:transparent;">
                 <input type="button" class="button" opcion="tarjetachiplectura" value=${idiomas[this.idioma].paginas.inicio.cargaCredito} @click="${this.proximaPantalla}">
             </div>
-            <div style="background-color:var(--pantalla-fondo);">
-            <input type="button" class="button" value="test"  @click="${this.test}">
-            <input type="button" class="button" value="venta" @click="${this.venta}">
-            <input type="button" class="button" value="cierre" @click="${this.cierre}">
-            </div>        
+           
+            <div class="botoneraTest">
+                <input type="button" class="button" value="test"  @click="${this.test}">
+                <input type="button" class="button" value="venta" @click="${this.venta}">
+                <input type="button" class="button" value="cierre" @click="${this.cierre}">
+                <input type="button" class="button" value="leer chip" @click="${this.leerChip}">
+            </div>
+           
         </div>
         `
     }
@@ -172,7 +199,7 @@ export class pantallaInicio extends connect(store, MODO_PANTALLA)(LitElement) {
             monto: 1,
             numeroFactura: 10000008901,
             cuotas: 1,
-            codigoTarjeta: "VI",
+            codigoTarjeta: "VVI",
             codigoPlan: "0",
             montoPropina: 0,
             codigoComercio: "03659307",
@@ -184,6 +211,9 @@ export class pantallaInicio extends connect(store, MODO_PANTALLA)(LitElement) {
     cierre() {
         store.dispatch(comandoCierre())
     }
+    leerChip() {
+        store.dispatch(leer())
+    }
 
     stateChanged(state, name) {
         if (name == MODO_PANTALLA && state.ui.quePantalla == "inicio") {
@@ -194,6 +224,10 @@ export class pantallaInicio extends connect(store, MODO_PANTALLA)(LitElement) {
     static get properties() {
         return {
             hidden: {
+                type: Boolean,
+                reflect: true
+            },
+            testing: {
                 type: Boolean,
                 reflect: true
             }

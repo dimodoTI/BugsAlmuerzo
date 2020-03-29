@@ -22,11 +22,17 @@ import {
 import {
   middleware as posNetMiddleware
 } from "./middleware/posNet"
+import {
+  middleware as tarjetaChipMiddleware
+} from "./middleware/tarjetaChip"
+import {
+  TARJETACHIP
+} from "./datos/inicio/datos/dispositivos";
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 let mdw = [
-  ...servidorBugsMiddleware, ...servidorWSMiddleware, ...uiMiddleware, ...posNetMiddleware
+  ...servidorBugsMiddleware, ...servidorWSMiddleware, ...uiMiddleware, ...posNetMiddleware, ...tarjetaChipMiddleware
 ]
 
 if (process.env.NODE_ENV !== 'production') {
@@ -36,4 +42,3 @@ export const store = createStore(
   reducers,
   composeEnhancers(applyMiddleware(...mdw))
 );
-

@@ -1,9 +1,25 @@
-import { ENVIAR_MENSAJE, RECIBIR_MENSAJE } from "../actions/operadora";
-import { connection } from "../../sandbox";
-import { enviar as enviarBugs, recibir as recibirBugs } from "../actions/servidorBugs";
-import { TARJETACHIP, POST, LECTORLED } from "../datos/inicio/datos/dispositivos"
-import { interpretar as tarjetaChipInterpretar } from "../actions/tarjetaChip"
-import { interpretar as posNetInterpretar } from "../actions/posNet"
+import {
+    ENVIAR_MENSAJE,
+    RECIBIR_MENSAJE
+} from "../actions/operadora";
+import {
+    connection
+} from "../../sandbox";
+import {
+    enviar as enviarBugs,
+    recibir as recibirBugs
+} from "../actions/servidorBugs";
+import {
+    TARJETACHIP,
+    POST,
+    LECTORLED
+} from "../datos/inicio/datos/dispositivos"
+import {
+    interpretar as tarjetaChipInterpretar
+} from "../actions/tarjetaChip"
+import {
+    interpretar as posNetInterpretar
+} from "../actions/posNet"
 
 
 export const enviar = ({
@@ -26,6 +42,7 @@ export const recibir = ({
             const texto = mensaje.split("#")[2]
             switch (dispositivo) {
                 case TARJETACHIP:
+                    dispatch(tarjetaChipInterpretar(texto))
                     break
                 case POST:
                     dispatch(posNetInterpretar(texto))

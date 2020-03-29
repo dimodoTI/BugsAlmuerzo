@@ -1,31 +1,37 @@
-import { ENVIAR, RECIBIR, PING, INTERPRETAR } from "../actions/tarjetaChip";
-import { enviarMensaje as operadoraEnviar } from "../actions/operadora"
-const dispositivo = "tarjetaChip"
+import {
+    GRABAR,
+    LEER,
+    INTERPRETAR
+} from "../actions/tarjetaChip";
+import {
+    enviarMensaje as operadoraEnviar
+} from "../actions/operadora"
 
-export const ping = ({
+
+
+export const grabarProcces = ({
     dispatch
 }) => next => action => {
     next(action);
-    if (action.type === PING) {
-        operadoraEnviar(dispositivo + ":PING")
+    if (action.type === GRABAR) {
+
     }
 };
 
-export const enviar = ({
+export const leerProcces = ({
     dispatch
 }) => next => action => {
     next(action);
-    if (action.type === ENVIAR) {
-        operadoraEnviar(dispositivo + ":" + action.orden + ":" + action.codigo + ":" + action.saldo)
+    if (action.type === LEER) {
+
     }
 };
 
-export const interpretar = ({
+export const interpretarProccess = ({
     dispatch
 }) => next => action => {
     next(action);
-    if (action.type === INTERPRETAR) {
-
-
-    }
+    if (action.type === INTERPRETAR) {}
 };
+
+export const middleware = [grabarProcces, leerProcces, interpretarProccess]

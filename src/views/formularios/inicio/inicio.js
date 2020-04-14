@@ -24,7 +24,8 @@ import {
     comandoCierre
 } from "../../../redux/actions/posNet";
 import {
-    leer
+    leer,
+    servicio
 } from "../../../redux/actions/tarjetaChip";
 
 const MODO_PANTALLA = "ui.timeStampPantalla"
@@ -184,7 +185,8 @@ export class pantallaInicio extends connect(store, MODO_PANTALLA)(LitElement) {
                 <input type="button" class="button" value="test"  @click="${this.test}">
                 <input type="button" class="button" value="venta" @click="${this.venta}">
                 <input type="button" class="button" value="cierre" @click="${this.cierre}">
-                <input type="button" class="button" value="leer chip" @click="${this.leerChip}">
+                <input type="button" class="button" value="chip en srvicio" @click="${this.servicioOn}">
+                <input type="button" class="button" value="chip fuera de servicio" @click="${this.servicioOff}">
             </div>
            
         </div>
@@ -211,8 +213,11 @@ export class pantallaInicio extends connect(store, MODO_PANTALLA)(LitElement) {
     cierre() {
         store.dispatch(comandoCierre())
     }
-    leerChip() {
-        store.dispatch(leer())
+    servicioOn() {
+        store.dispatch(servicio(true))
+    }
+    servicioOff() {
+        store.dispatch(servicio(false))
     }
 
     stateChanged(state, name) {

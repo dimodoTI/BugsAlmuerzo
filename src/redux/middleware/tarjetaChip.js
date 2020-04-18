@@ -38,9 +38,19 @@ export const servicioProcces = ({
     next(action);
     if (action.type === SERVICIO) {
         if (action.activo) {
-            dispatch(operadoraEnviar("#" + TARJETACHIP + "#>s1" + String.fromCharCode(parseInt("0A", 16))))
+            dispatch(operadoraEnviar({
+                periferico: "tarjetaChip",
+                comando: "set",
+                subComando: "on"
+            }))
+            //dispatch(operadoraEnviar("#" + TARJETACHIP + "#>s1" + String.fromCharCode(parseInt("0A", 16))))
         } else {
-            dispatch(operadoraEnviar("#" + TARJETACHIP + "#>s0" + String.fromCharCode(parseInt("0A", 16))))
+            dispatch(operadoraEnviar({
+                periferico: "tarjetaChip",
+                comando: "set",
+                subComando: "off"
+            }))
+            //dispatch(operadoraEnviar("#" + TARJETACHIP + "#>s0" + String.fromCharCode(parseInt("0A", 16))))
         }
     }
 };
@@ -52,7 +62,7 @@ export const interpretarProccess = ({
 }) => next => action => {
     next(action);
     if (action.type === INTERPRETAR) {
-        action.mensaje.split("").forEach(m => {
+        action.mensaje.data.split("").forEach(m => {
             if (m.charCodeAt(0) != 16) {
                 dispatch(buffer(m))
             } else {

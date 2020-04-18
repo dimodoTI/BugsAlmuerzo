@@ -36,26 +36,24 @@ export const recibir = ({
 }) => next => action => {
     next(action);
     if (action.type === RECIBIR_MENSAJE) {
-        const mensaje = action.mensaje.data
-        if (mensaje.indexOf("#") == 0) {
-            const dispositivo = mensaje.split("#")[1]
-            const texto = mensaje.split("#")[2]
-            switch (dispositivo) {
-                case TARJETACHIP:
-                    dispatch(tarjetaChipInterpretar(texto))
-                    break
-                case POST:
-                    dispatch(posNetInterpretar(texto))
-                    break
-                case LECTORLED:
-                    break
+        const mensaje = action.mensaje
 
-            }
+        switch (mensaje.periferico) {
+            case TARJETACHIP:
+                dispatch(tarjetaChipInterpretar(mensaje))
+                break
+            case POST:
+                dispatch(posNetInterpretar(mensajeEspera))
+                break
+            case LECTORLED:
+                break
+
         }
-        if (action.mensaje.data.indexOf("$") == 0) {
-            dispatch(recibirBugs(action.mensaje.data))
-        }
-        //console.log(action.mensaje)
+
+        /*         if (action.mensaje.data.indexOf("$") == 0) {
+                    dispatch(recibirBugs(action.mensaje.data))
+                }
+         */ //console.log(action.mensaje)
     }
 };
 

@@ -185,7 +185,7 @@ export class pantallaInicio extends connect(store, MODO_PANTALLA)(LitElement) {
                 <input type="button" class="button" value="test"  @click="${this.test}">
                 <input type="button" class="button" value="venta" @click="${this.venta}">
                 <input type="button" class="button" value="cierre" @click="${this.cierre}">
-                <input type="button" class="button" value="chip en srvicio" @click="${this.servicioOn}">
+                <input type="button" class="button" value="chip en servicio" @click="${this.servicioOn}">
                 <input type="button" class="button" value="chip fuera de servicio" @click="${this.servicioOff}">
             </div>
            

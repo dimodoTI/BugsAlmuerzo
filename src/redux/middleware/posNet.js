@@ -66,7 +66,11 @@ export const ejecutarComandoProcces = ({
     next(action);
     if (action.type === COMANDO) {
         const postNet = getState().postNet
-        dispatch(operadoraEnviar(postNet.comandos[action.comando].comando))
+        dispatch(operadoraEnviar({
+            periferico: "posNet",
+            comando: "write",
+            subComando: postNet.comandos[action.comando].comando
+        }))
     }
 };
 

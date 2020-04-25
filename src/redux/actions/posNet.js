@@ -62,17 +62,17 @@ export const reintentoComando = (comando, timeOut) => ({
 export const comandoTest = () => ({
     type: COMANDO_TEST,
     comandos: [{
-            comando: "#" + POST + "#" + ENQ,
+            comando: encodeURIComponent(ENQ),
             fin: ACK,
             verificado: false
         },
         {
-            comando: "#" + POST + "#" + STX + TEST + ETX + LRC(TEST + ETX),
+            comando: encodeURIComponent(STX + TEST + ETX + LRC(TEST + ETX)),
             fin: ETX,
             verificado: true
         },
         {
-            comando: "#" + POST + "#" + ACK,
+            comando: encodeURIComponent(ACK),
             fin: null,
             verificado: false
         }
@@ -93,32 +93,31 @@ export const comandoVenta = ({
     modo = 1
 } = {}) => {
     let DATOS_VENTA = (monto * 100).toString().padStart(12, "0")
-    DATOS_VENTA += numeroFactura.toString().padStart(12, "0")
+    DATOS_VENTA += numeroFactura.toString().padEnd(12, "0")
     DATOS_VENTA += cuotas.toString().padStart(2, "0")
     DATOS_VENTA += codigoTarjeta.padStart(3, "0")
     DATOS_VENTA += codigoPlan.padStart(1, " ")
     DATOS_VENTA += (montoPropina * 100).toString().padStart(12, "0")
-    DATOS_VENTA += cuotas.toString().padStart(2, "0")
     DATOS_VENTA += codigoComercio.padEnd(15, " ")
     DATOS_VENTA += nombreComercio.padEnd(23, " ")
     DATOS_VENTA += cuitComercio.padEnd(23, " ")
-    DATOS_VENTA += modo.toString()
+    DATOS_VENTA += String.fromCharCode(modo)
 
     return {
         type: COMANDO_VENTA,
         comandos: [{
-                comando: "#" + POST + "#" + ENQ,
+                comando: encodeURIComponent(ENQ),
                 fin: ACK,
                 verificado: false
             },
             {
-                comando: "#" + POST + "#" + STX + VENTA + DATOS_VENTA + ETX + LRC(VENTA + DATOS_VENTA + ETX),
+                comando: encodeURIComponent(STX + VENTA + DATOS_VENTA + ETX + LRC(VENTA + DATOS_VENTA + ETX)),
                 fin: ETX,
                 verificado: true,
                 timeOut: 30000
             },
             {
-                comando: "#" + POST + "#" + ACK,
+                comando: encodeURIComponent(ACK),
                 fin: null,
                 verificado: false
             }

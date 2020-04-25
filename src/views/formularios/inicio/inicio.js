@@ -199,10 +199,10 @@ export class pantallaInicio extends connect(store, MODO_PANTALLA)(LitElement) {
     venta() {
         store.dispatch(comandoVenta({
             monto: 1,
-            numeroFactura: 10000008901,
+            numeroFactura: 100000089012,
             cuotas: 1,
-            codigoTarjeta: "VVI",
-            codigoPlan: "0",
+            codigoTarjeta: "0VI",
+            codigoPlan: "1",
             montoPropina: 0,
             codigoComercio: "03659307",
             nombreComercio: "PRISMA MP",

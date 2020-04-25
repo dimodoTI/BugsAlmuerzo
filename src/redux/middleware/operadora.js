@@ -7,55 +7,52 @@ import {
 } from "../../sandbox";
 import {
     enviar as enviarBugs,
-    recibir as recibirBugs
+    recibir as recibirBugs,
 } from "../actions/servidorBugs";
 import {
     TARJETACHIP,
     POST,
-    LECTORLED
-} from "../datos/inicio/datos/dispositivos"
+    LECTORLED,
+} from "../datos/inicio/datos/dispositivos";
 import {
     interpretar as tarjetaChipInterpretar
-} from "../actions/tarjetaChip"
+} from "../actions/tarjetaChip";
 import {
     interpretar as posNetInterpretar
-} from "../actions/posNet"
-
+} from "../actions/posNet";
 
 export const enviar = ({
     dispatch
-}) => next => action => {
+}) => (next) => (action) => {
     next(action);
     if (action.type === ENVIAR_MENSAJE) {
-        connection.send(action.mensaje)
+        connection.send(action.mensaje);
     }
 };
 
 export const recibir = ({
     dispatch
-}) => next => action => {
+}) => (next) => (action) => {
     next(action);
     if (action.type === RECIBIR_MENSAJE) {
-        const mensaje = action.mensaje
+        const mensaje = action.mensaje;
 
         switch (mensaje.periferico) {
             case TARJETACHIP:
-                dispatch(tarjetaChipInterpretar(mensaje))
-                break
+                dispatch(tarjetaChipInterpretar(mensaje));
+                break;
             case POST:
-                dispatch(posNetInterpretar(mensajeEspera))
-                break
+                dispatch(posNetInterpretar(mensaje));
+                break;
             case LECTORLED:
-                break
-
+                break;
         }
 
         /*         if (action.mensaje.data.indexOf("$") == 0) {
-                    dispatch(recibirBugs(action.mensaje.data))
-                }
-         */ //console.log(action.mensaje)
+                        dispatch(recibirBugs(action.mensaje.data))
+                    }
+             */ //console.log(action.mensaje)
     }
 };
 
-
-export const middleware = [enviar, recibir]
+export const middleware = [enviar, recibir];

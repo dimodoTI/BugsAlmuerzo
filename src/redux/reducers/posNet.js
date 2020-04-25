@@ -41,6 +41,7 @@ export const reducer = (state = initialState, action) => {
             newState.fin = false
             newState.correcto = false
             newState.comandos = action.comandos
+            newState.ultimoComando = 0
             break;
         case COMANDO:
             if (newState.ultimoComando != action.comando) {
@@ -61,7 +62,7 @@ export const reducer = (state = initialState, action) => {
             // si no es un timeout
             if (action.mensaje != "fallo") {
                 //Armo el mensaje y compruebo el DV final.
-                action.mensaje.split("").forEach(m => {
+                decodeURIComponent(action.mensaje.data).split("").forEach(m => {
                     // si tiene DV lo toma y verifica
                     if (newState.fin) {
                         newState.control = m

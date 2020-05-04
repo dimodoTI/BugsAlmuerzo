@@ -7,11 +7,15 @@ import {
 } from "../actions/posNet";
 
 import {
-    LRC
+    LRC,
+    ACK,
+    STX
 } from "../datos/posNet/constantes"
 
 const initialState = {
     respuesta: "",
+    respuestaCodigo: "",
+    respuestaMensaje: "",
     control: "",
     fin: false,
     correcto: false,
@@ -52,6 +56,8 @@ export const reducer = (state = initialState, action) => {
             newState.operadorTimeOut = action.operadorTimeOut
             if (newState.comandos[action.comando].fin) {
                 newState.respuesta = ""
+                newState.respuestaCodigo = ""
+                newState.respuestaMensaje = ""
             }
             newState.control = ""
             newState.fin = false
@@ -69,6 +75,23 @@ export const reducer = (state = initialState, action) => {
                         newState.correcto = LRC(newState.respuesta.substr(2)) == m
                         newState.respuestaTimeStamp = (new Date()).getTime()
                         newState.finDeMensaje = true
+                        if (newState.respuesta.indexOf(ACK + STX + "VEN2") == 0) {
+                            newState.respuestaCodigo = "ALERTA"
+                            newState.respuestaMensaje = newState.respuesta.substr(5, 3)
+                        }
+                        if (newState.respuesta.indexOf(ACK + STX + "VEN3") == 0) {
+                            newState.respuestaCodigo = "ERROR"
+                            newState.respuestaMensaje = newState.respuesta.substr(5, 3)
+                        }
+                        if (newState.respuesta.indexOf(ACK + STX + "VEN000") == 0) {
+                            newState.respuestaCodigo = "TERMINADO CON ALERTA"
+                            newState.respuestaMensaje = newState.respuesta.substr(10, 2)
+                        }
+                        if (newState.respuesta.indexOf(ACK + ACK + STX + "VEN000") == 0) {
+                            newState.respuestaCodigo = "TERMINADO"
+                            newState.respuestaMensaje = "OK"
+                        }
+
                     } else {
                         //encadena el siguiente caracter
                         newState.respuesta += m

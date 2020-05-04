@@ -114,12 +114,13 @@ export const comandoVenta = ({
                 comando: encodeURIComponent(STX + VENTA + DATOS_VENTA + ETX + LRC(VENTA + DATOS_VENTA + ETX)),
                 fin: ETX,
                 verificado: true,
-                timeOut: 30000
+                timeOut: 300000
             },
             {
                 comando: encodeURIComponent(ACK),
                 fin: null,
                 verificado: false
+
             }
         ]
 
@@ -129,18 +130,18 @@ export const comandoVenta = ({
 export const comandoCierre = () => ({
     type: COMANDO_CIERRE,
     comandos: [{
-            comando: "#" + POST + "#" + ENQ,
+            comando: encodeURIComponent(ENQ),
             fin: ACK,
             verificado: false
         },
         {
-            comando: "#" + POST + "#" + STX + CIERRE + ETX + LRC(CIERRE + ETX),
+            comando: encodeURIComponent(STX + CIERRE + ETX + LRC(CIERRE + ETX)),
             fin: ETX,
             verificado: true,
             timeOut: 60000
         },
         {
-            comando: "#" + POST + "#" + ACK,
+            comando: encodeURIComponent(ACK),
             fin: null,
             verificado: false
         }

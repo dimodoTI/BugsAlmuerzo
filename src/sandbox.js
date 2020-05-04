@@ -24,7 +24,7 @@ import {
 
 export let connection = null;
 
-const ipAddress = "192.168.1.104";
+const ipAddress = "localhost";
 
 const url = "ws://" + ipAddress + ":9000/";
 

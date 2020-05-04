@@ -198,7 +198,7 @@ export class pantallaInicio extends connect(store, MODO_PANTALLA)(LitElement) {
     }
     venta() {
         store.dispatch(comandoVenta({
-            monto: 1,
+            monto: 125,
             numeroFactura: 100000089012,
             cuotas: 1,
             codigoTarjeta: "0VI",

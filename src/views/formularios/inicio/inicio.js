@@ -29,6 +29,11 @@ import {
     servicio as servicioTC
 } from "../../../redux/actions/tarjetaChip";
 
+import {
+    enviarMensaje
+} from "../../../redux/actions/operadora";
+
+
 const MODO_PANTALLA = "ui.timeStampPantalla"
 export class pantallaInicio extends connect(store, MODO_PANTALLA)(LitElement) {
     constructor() {
@@ -190,6 +195,7 @@ export class pantallaInicio extends connect(store, MODO_PANTALLA)(LitElement) {
                 <input type="button" class="button" value="chip fuera de servicio" @click="${this.servicioOff}">
                 <input type="button" class="button" value="Leer chip" @click="${this.chipLeer}">
                 <input type="button" class="button" value="Grabar chip" @click="${this.chipGrabar}">
+                <input type="button" class="button" value="Impresora" @click="${this.imprimir}">
             </div>
            
         </div>
@@ -227,6 +233,20 @@ export class pantallaInicio extends connect(store, MODO_PANTALLA)(LitElement) {
     }
     chipGrabar() {
         store.dispatch(grabarTC(2000))
+    }
+    imprimir() {
+        store.dispatch(enviarMensaje({
+            periferico: "impresora",
+            comando: "print",
+            subComando: {
+                usuario: 241,
+                nombre: "Sergio Ferro",
+                fecha: "30-05-2020",
+                descripcion: "Postre de queso $150",
+                numero: 2
+            }
+        }))
+
     }
 
     stateChanged(state, name) {

@@ -30,6 +30,12 @@ import {
 import {
     grabar
 } from "../../../redux/actions/tarjetaChip"
+import {
+    enviarMensaje
+} from "../../../redux/actions/operadora";
+import {
+    usuarios
+} from "../../../configuracion/usuarios.json"
 
 const MODO_PANTALLA = "ui.timeStampPantalla"
 export class pantallaViandaMenuAceptacion extends connect(store, MODO_PANTALLA)(LitElement) {
@@ -331,10 +337,30 @@ export class pantallaViandaMenuAceptacion extends connect(store, MODO_PANTALLA)(
     }
 
     proximaPantalla(e) {
-        const credito = store.getState().tarjetaChip.credito
-        const costo = store.getState().vianda.menu.precio
-        store.dispatch(grabar(credito - costo))
-        //store.dispatch(guardarImporteRecarga(parseInt(e.currentTarget.getAttribute("importe"), 10)))
+        const menu = store.getState().vianda.menu
+        const credito = store.getState().tarjetachipRecarga.saldo
+        const usuario = store.getState().tarjetachipRecarga.usuario
+
+        const hoy = new Date()
+        const maniana = new Date(hoy.setDate(hoy.getDate() + 1))
+        const fecha = maniana.getDay().toString().padStart(2, "0") + "/" + (maniana.getMonth() + 1).toString().padStart(2, "0") + "/" + maniana.getFullYear().toString()
+
+        store.dispatch(grabar(credito - menu.precio))
+
+
+
+
+        store.dispatch(enviarMensaje({
+            periferico: "impresora",
+            comando: "print",
+            subComando: {
+                usuario: usuario.id,
+                nombre: usuario.nombre,
+                fecha: fecha,
+                descripcion: (menu.titulo.substr(0, 18) + " $" + menu.precio),
+                numero: menu.id
+            }
+        }))
         store.dispatch(modoPantalla("viandamenuexito"))
     }
 }

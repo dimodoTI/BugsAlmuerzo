@@ -9,22 +9,50 @@ import {
 import {
     connect
 } from "@brunomon/helpers";
-import { modoPantalla, dispararTimer, errorTitulo, errorMensaje, mostrarError } from "../../../redux/actions/ui";
-import { guardarUsuario, guardarImporteSaldo, guardarImporteRecarga } from "../../../redux/actions/tarjetachipRecarga";
-import { idiomas } from "../../../redux/datos/vianda/idioma/idiomas"
-import { idiomas as idiomaInicio } from "../../../redux/datos/inicio/idioma/idiomas"
-import { tiempos } from "../../../redux/datos/vianda/datos/tiempoEspera"
+import {
+    modoPantalla,
+    dispararTimer,
+    errorTitulo,
+    errorMensaje,
+    mostrarError,
+    showError
+} from "../../../redux/actions/ui";
+import {
+    guardarUsuario,
+    guardarImporteSaldo,
+    guardarImporteRecarga
+} from "../../../redux/actions/tarjetachipRecarga";
+import {
+    idiomas
+} from "../../../redux/datos/vianda/idioma/idiomas"
+import {
+    idiomas as idiomaInicio
+} from "../../../redux/datos/inicio/idioma/idiomas"
+import {
+    tiempos
+} from "../../../redux/datos/vianda/datos/tiempoEspera"
+import {
+    servicio as servicioTC
+} from "../../../redux/actions/tarjetaChip";
+
+import {
+    usuarios
+} from "../../../configuracion/usuarios.json"
+
 
 const MODO_PANTALLA = "ui.timeStampPantalla"
-export class pantallaViandaTarjetaChipLectura extends connect(store, MODO_PANTALLA)(LitElement) {
+const TARJETA_CHIP = "tarjetaChip.respuestaTimeStamp"
+const TARJETA_CHIP_ERROR = "tarjetaChip.errorEnTarjeta"
+export class pantallaViandaTarjetaChipLectura extends connect(store, MODO_PANTALLA, TARJETA_CHIP, TARJETA_CHIP_ERROR)(LitElement) {
     constructor() {
         super();
         this.hidden = true
         this.idioma = "ES"
+
     }
 
     static get styles() {
-        return css`
+        return css `
         :host{
             display: grid;
             justify-items:center;
@@ -164,13 +192,13 @@ export class pantallaViandaTarjetaChipLectura extends connect(store, MODO_PANTAL
         `
     }
     render() {
-        return html`
+        return html `
         <div id="fondoimagen01">
         </div>
         <div id="fondocolor">
         </div>
         <div id="fondocuerpo">
-            <div id="MenuDescripcion"  @click="${this.errorC}">
+            <div id="MenuDescripcion">
             ${idiomas[this.idioma].paginas.general.nombreSistema}
             </div>
             <div id="titulo">
@@ -194,6 +222,27 @@ export class pantallaViandaTarjetaChipLectura extends connect(store, MODO_PANTAL
     stateChanged(state, name) {
         if (name == MODO_PANTALLA && state.ui.quePantalla == "viandatarjetachiplectura") {
             store.dispatch(dispararTimer(tiempos.viandatarjetachiplectura.segundos, "mensajeespera", "viandatarjetachiplectura"))
+            store.dispatch(servicioTC(true))
+        }
+        if (name == TARJETA_CHIP && state.ui.quePantalla == "viandatarjetachiplectura") {
+            if (state.tarjetaChip.colocada) {
+                const usuario = usuarios.find(u => {
+                    return u.id == state.tarjetaChip.usuario
+                })
+                if (!usuario) {
+                    store.dispatch(mostrarError("Tarjeta no registrada", "Consulte con el proveedor de su tarjeta para que se habilte esta operación."))
+                }
+                store.dispatch(guardarImporteSaldo(state.tarjetaChip.credito))
+                store.dispatch(guardarUsuario({
+                    id: state.tarjetaChip.usuario,
+                    nombre: usuario.nombre
+                }))
+                store.dispatch(modoPantalla("viandaselecciontipomenu"))
+
+            }
+        }
+        if (name == TARJETA_CHIP_ERROR) {
+            store.dispatch(mostrarError("Error de lectura", "Su tarjeta chip no se pudo leer. Podria estar dañada. Intente nuevamente."))
         }
     }
 
@@ -206,18 +255,12 @@ export class pantallaViandaTarjetaChipLectura extends connect(store, MODO_PANTAL
         }
     }
 
-    errorC() {
-        store.dispatch(mostrarError(idiomaInicio[this.idioma].paginas.eTituloTarjetachipLectura, idiomaInicio[this.idioma].paginas.eMensajeTarjetachipLectura, "error", "viandatarjetachiplectura"))
-    }
 
     volver() {
+
         store.dispatch(modoPantalla("inicio"))
     }
 
-    proximaPantalla() {
-        store.dispatch(guardarImporteSaldo(1200))
-        store.dispatch(guardarUsuario({ id: 1, nombre: "Sergio Ferro" }))
-        store.dispatch(modoPantalla("viandaselecciontipomenu"))
-    }
+
 }
 window.customElements.define("pantalla-viandatarjetachiplectura", pantallaViandaTarjetaChipLectura);

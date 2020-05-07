@@ -25,6 +25,7 @@ const initialState = {
     timeStampPantalla: null,
     errorTitulo: "",
     errorMensaje: "",
+    errorTimeStamp: null,
     quePantalla: null,
     timer: null,
     intervalo: null,
@@ -89,6 +90,7 @@ export const reducer = (state = initialState, action) => {
         case MOSTRAR_ERROR:
             newState.errorTitulo = action.titulo
             newState.errorMensaje = action.mensaje
+            newState.errorTimeStamp = (new Date()).getTime()
             break;
     }
     return newState;

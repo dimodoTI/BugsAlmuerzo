@@ -9,13 +9,34 @@ import {
 import {
     connect
 } from "@brunomon/helpers";
-import { modoPantalla, dispararTimer } from "../../../redux/actions/ui";
-import { guardarUsuario, guardarImporteSaldo, guardarImporteRecarga } from "../../../redux/actions/tarjetachipRecarga";
-import { idiomas } from "../../../redux/datos/tarjetachip/idioma/idiomas"
-import { tiempos } from "../../../redux/datos/tarjetachip/datos/tiempoEspera"
+import {
+    modoPantalla,
+    dispararTimer
+} from "../../../redux/actions/ui";
+import {
+    guardarUsuario,
+    guardarImporteSaldo,
+    guardarImporteRecarga
+} from "../../../redux/actions/tarjetachipRecarga";
+import {
+    idiomas
+} from "../../../redux/datos/tarjetachip/idioma/idiomas"
+import {
+    tiempos
+} from "../../../redux/datos/tarjetachip/datos/tiempoEspera"
+
+import {
+    servicio as servicioTC
+} from "../../../redux/actions/tarjetaChip";
+
+import {
+    usuarios
+} from "../../../configuracion/usuarios.json"
 
 const MODO_PANTALLA = "ui.timeStampPantalla"
-export class pantallaTarjetaChipLectura extends connect(store, MODO_PANTALLA)(LitElement) {
+const TARJETA_CHIP = "tarjetaChip.respuestaTimeStamp"
+const TARJETA_CHIP_ERROR = "tarjetaChip.errorEnTarjeta"
+export class pantallaTarjetaChipLectura extends connect(store, MODO_PANTALLA, TARJETA_CHIP, TARJETA_CHIP_ERROR)(LitElement) {
     constructor() {
         super();
         this.hidden = true
@@ -23,7 +44,7 @@ export class pantallaTarjetaChipLectura extends connect(store, MODO_PANTALLA)(Li
     }
 
     static get styles() {
-        return css`
+        return css `
         :host{
             display: grid;
             justify-items:center;
@@ -163,7 +184,7 @@ export class pantallaTarjetaChipLectura extends connect(store, MODO_PANTALLA)(Li
         `
     }
     render() {
-        return html`
+        return html `
         <div id="fondoimagen01">
         </div>
         <div id="fondocolor">
@@ -193,6 +214,27 @@ export class pantallaTarjetaChipLectura extends connect(store, MODO_PANTALLA)(Li
     stateChanged(state, name) {
         if (name == MODO_PANTALLA && state.ui.quePantalla == "tarjetachiplectura") {
             store.dispatch(dispararTimer(tiempos.tarjetachiplectura.segundos, "mensajeespera", "tarjetachiplectura"))
+            store.dispatch(servicioTC(true))
+        }
+        if (name == TARJETA_CHIP && state.ui.quePantalla == "tarjetachiplectura") {
+            if (state.tarjetaChip.colocada) {
+                const usuario = usuarios.find(u => {
+                    return u.id == state.tarjetaChip.usuario
+                })
+                if (!usuario) {
+                    store.dispatch(mostrarError("Tarjeta no registrada", "Consulte con el proveedor de su tarjeta para que se habilte esta operación."))
+                }
+                store.dispatch(guardarImporteSaldo(state.tarjetaChip.credito))
+                store.dispatch(guardarUsuario({
+                    id: state.tarjetaChip.usuario,
+                    nombre: usuario.nombre
+                }))
+                store.dispatch(modoPantalla("tarjetachipseleccionimporte"))
+
+            }
+        }
+        if (name == TARJETA_CHIP_ERROR) {
+            store.dispatch(mostrarError("Error de lectura", "Su tarjeta chip no se pudo leer. Podria estar dañada. Intente nuevamente."))
         }
     }
 
@@ -208,13 +250,14 @@ export class pantallaTarjetaChipLectura extends connect(store, MODO_PANTALLA)(Li
     volver() {
         store.dispatch(modoPantalla("inicio"))
     }
-    volver() {
-        store.dispatch(modoPantalla("inicio"))
-    }
-    
+
+
     proximaPantalla() {
         store.dispatch(guardarImporteSaldo(120))
-        store.dispatch(guardarUsuario({ id: 1, nombre: "Sergio Ferro" }))
+        store.dispatch(guardarUsuario({
+            id: 1,
+            nombre: "Sergio Ferro"
+        }))
         store.dispatch(modoPantalla("tarjetachipseleccionimporte"))
     }
 }

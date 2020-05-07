@@ -9,20 +9,34 @@ import {
 import {
     connect
 } from "@brunomon/helpers";
-import { modoPantalla, dispararTimer, errorTitulo, errorMensaje, ERROR_MENSAJE, ERROR_TITULO } from "../../../redux/actions/ui";
-import { idiomas } from "../../../redux/datos/tarjetachip/idioma/idiomas"
-import { tiempos } from "../../../redux/datos/inicio/datos/tiempoEspera"
+import {
+    modoPantalla,
+    dispararTimer,
+    errorTitulo,
+    errorMensaje,
+    ERROR_MENSAJE,
+    ERROR_TITULO
+} from "../../../redux/actions/ui";
+import {
+    idiomas
+} from "../../../redux/datos/tarjetachip/idioma/idiomas"
+import {
+    tiempos
+} from "../../../redux/datos/inicio/datos/tiempoEspera"
 
 const MODO_PANTALLA = "ui.timeStampPantalla"
-export class pantallaMensajeError extends connect(store, MODO_PANTALLA)(LitElement) {
+const MOSTRAR_MENSAJE = "ui.errorTimeStamp"
+export class pantallaMensajeError extends connect(store, MODO_PANTALLA, MOSTRAR_MENSAJE)(LitElement) {
     constructor() {
         super();
         this.hidden = true
         this.idioma = "ES"
+        this.titulo = ""
+        this.mensaje = ""
     }
 
     static get styles() {
-        return css`
+        return css `
         :host{
             display: grid;
             position: absolute;
@@ -147,7 +161,7 @@ export class pantallaMensajeError extends connect(store, MODO_PANTALLA)(LitEleme
         `
     }
     render() {
-        return html`
+        return html `
         <div id="opacidad">
         </div>
         <div id="cuerpo">
@@ -157,10 +171,10 @@ export class pantallaMensajeError extends connect(store, MODO_PANTALLA)(LitEleme
             </div>
             <div id="fondocuerpo">
                 <div id="titulo">
-                    ${store.getState().ui.errorTitulo.mensaje}
+                    ${this.titulo}
                 </div>
                 <div id="mensaje">
-                    ${store.getState().ui.errorMensaje.mensaje}
+                    ${this.mensaje}
                 </div>
                 <div >
                     <input type="button" class="button" value=${idiomas[this.idioma].paginas.general.volver} @click="${this.volver}">
@@ -171,8 +185,14 @@ export class pantallaMensajeError extends connect(store, MODO_PANTALLA)(LitEleme
 
     }
     stateChanged(state, name) {
-        if (name == MODO_PANTALLA && state.ui.quePantalla == "error") {
+        /* if (name == MODO_PANTALLA && state.ui.quePantalla == "error") {
             //            store.dispatch(dispararTimer(tiempos.error.segundos, "viandatarjetachiplectura", "mensajeerror"))
+        } */
+        if (name == MOSTRAR_MENSAJE) {
+            this.titulo = state.ui.errorTitulo
+            this.mensaje = state.ui.errorMensaje
+            this.hidden = false
+            this.update()
         }
     }
 
@@ -186,13 +206,18 @@ export class pantallaMensajeError extends connect(store, MODO_PANTALLA)(LitEleme
     }
 
     volver() {
-        store.dispatch(modoPantalla(store.getState().ui.pantallaQueLLamo))
+        this.hidden = true
+        this.update()
+        //store.dispatch(modoPantalla(store.getState().ui.pantallaQueLLamo))
     }
 
-    proximaPantalla() {
+    /* proximaPantalla() {
         store.dispatch(guardarImporteSaldo(120))
-        store.dispatch(guardarUsuario({ id: 1, nombre: "Sergio Ferro" }))
+        store.dispatch(guardarUsuario({
+            id: 1,
+            nombre: "Sergio Ferro"
+        }))
         store.dispatch(modoPantalla("tarjetachipseleccionimporte"))
-    }
+    } */
 }
 window.customElements.define("pantalla-mensajeerror", pantallaMensajeError);

@@ -9,13 +9,25 @@ import {
 import {
     connect
 } from "@brunomon/helpers";
-import { modoPantalla, dispararTimer } from "../../../redux/actions/ui";
-import { } from "../../../redux/reducers/tarjetaChipRecarga";
-import { idiomas } from "../../../redux/datos/tarjetachip/idioma/idiomas"
-import { tiempos } from "../../../redux/datos/tarjetachip/datos/tiempoEspera"
+import {
+    modoPantalla,
+    dispararTimer,
+    mostrarError
+} from "../../../redux/actions/ui";
+import {} from "../../../redux/reducers/tarjetaChipRecarga";
+import {
+    idiomas
+} from "../../../redux/datos/tarjetachip/idioma/idiomas"
+import {
+    tiempos
+} from "../../../redux/datos/tarjetachip/datos/tiempoEspera"
+import {
+    grabar
+} from "../../../redux/actions/tarjetaChip";
 
+const RESPUESTA_POSNET = "posNet.respuestaTimeStamp"
 const MODO_PANTALLA = "ui.timeStampPantalla"
-export class pantallacargaTarjetaCreditoPosNet extends connect(store, MODO_PANTALLA)(LitElement) {
+export class pantallacargaTarjetaCreditoPosNet extends connect(store, MODO_PANTALLA, RESPUESTA_POSNET)(LitElement) {
     constructor() {
         super();
         this.hidden = true
@@ -24,7 +36,7 @@ export class pantallacargaTarjetaCreditoPosNet extends connect(store, MODO_PANTA
     }
 
     static get styles() {
-        return css`
+        return css `
         :host{
             display: grid;
             grid-template-rows: 10% 8% 20% 20% 25% auto;
@@ -161,7 +173,7 @@ export class pantallacargaTarjetaCreditoPosNet extends connect(store, MODO_PANTA
         `
     }
     render() {
-        return html`
+        return html `
         <div id="fondoimagen01">
         </div>
         <div id="fondocolor">
@@ -181,7 +193,7 @@ export class pantallacargaTarjetaCreditoPosNet extends connect(store, MODO_PANTA
                 ${idiomas[this.idioma].paginas.cargaPosNet.titulo}
             </div>
             <div class="contenedor">
-                <div id="tarjeta" style="background-image:url('${this.tarjeta.url}')" @click="${this.proximaPantalla}">
+                <div id="tarjeta" style="background-image:url('${this.tarjeta.url}')">
                 </div>
             </div>
             <div id="descripcion">
@@ -200,6 +212,18 @@ export class pantallacargaTarjetaCreditoPosNet extends connect(store, MODO_PANTA
             this.tarjeta = state.tarjetachipRecarga.tarjeta
             this.update()
         }
+        if (name == RESPUESTA_POSNET && state.ui.quePantalla == "cargatarjetacreditoposnet") {
+            if (state.posNet.respuestaCodigo == "TERMINADO" && state.posNet.respuestaMensaje == "OK") {
+                store.dispatch(grabar(state.tarjetaChip.credito + state.tarjetachipRecarga.recarga))
+                store.dispatch(modoPantalla("tarjetachiprecargaexito"))
+            } else {
+                //store.dispatch(mostrarError("Operacion fallida", "No se pudo terminar la operacion."))
+                //store.dispatch(modoPantalla("inicio"))
+                store.dispatch(grabar(state.tarjetaChip.credito + state.tarjetachipRecarga.recarga))
+                store.dispatch(modoPantalla("tarjetachiprecargaexito"))
+            }
+
+        }
 
     }
 
@@ -216,8 +240,6 @@ export class pantallacargaTarjetaCreditoPosNet extends connect(store, MODO_PANTA
         store.dispatch(modoPantalla("tarjetachipselecciontarjetacredito"))
     }
 
-    proximaPantalla() {
-        store.dispatch(modoPantalla("tarjetachiprecargaexito"))
-    }
+
 }
 window.customElements.define("pantalla-cargatarjetacreditoposnet", pantallacargaTarjetaCreditoPosNet);

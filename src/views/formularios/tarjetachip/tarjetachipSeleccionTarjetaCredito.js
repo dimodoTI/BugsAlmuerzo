@@ -9,11 +9,25 @@ import {
 import {
     connect
 } from "@brunomon/helpers";
-import { modoPantalla, dispararTimer } from "../../../redux/actions/ui";
-import { guardarTarjetaCreditoRecarga } from "../../../redux/actions/tarjetachipRecarga";
-import { idiomas } from "../../../redux/datos/tarjetachip/idioma/idiomas"
-import { tiempos } from "../../../redux/datos/tarjetachip/datos/tiempoEspera"
-import { tarjetas } from "../../../redux/datos/tarjetachip/datos/tarjetas"
+import {
+    modoPantalla,
+    dispararTimer
+} from "../../../redux/actions/ui";
+import {
+    guardarTarjetaCreditoRecarga
+} from "../../../redux/actions/tarjetachipRecarga";
+import {
+    idiomas
+} from "../../../redux/datos/tarjetachip/idioma/idiomas"
+import {
+    tiempos
+} from "../../../redux/datos/tarjetachip/datos/tiempoEspera"
+import {
+    tarjetas
+} from "../../../redux/datos/tarjetachip/datos/tarjetas"
+import {
+    comandoVenta
+} from "../../../redux/actions/posNet"
 
 
 const MODO_PANTALLA = "ui.timeStampPantalla"
@@ -25,7 +39,7 @@ export class pantallaTarjetaChipSeleccionTarjetaCredito extends connect(store, M
     }
 
     static get styles() {
-        return css`
+        return css `
         :host{
             display: grid;
             justify-items:center;
@@ -147,8 +161,7 @@ export class pantallaTarjetaChipSeleccionTarjetaCredito extends connect(store, M
         `
     }
     render() {
-        return html
-            `
+        return html `
         <div id="fondoimagen01">
         </div>
         <div id="fondocolor">
@@ -207,6 +220,19 @@ export class pantallaTarjetaChipSeleccionTarjetaCredito extends connect(store, M
     proximaPantalla(e) {
         store.dispatch(guardarTarjetaCreditoRecarga(e.currentTarget.tarjeta))
         store.dispatch(modoPantalla("cargatarjetacreditoposnet"))
+
+        store.dispatch(comandoVenta({
+            monto: store.getState().tarjetachipRecarga.recarga,
+            numeroFactura: 100000089012,
+            cuotas: 1,
+            codigoTarjeta: store.getState().tarjetachipRecarga.tarjeta.codigo,
+            codigoPlan: "1",
+            montoPropina: 0,
+            codigoComercio: "03659307",
+            nombreComercio: "PRISMA MP",
+            cuitComercio: "30-59891004-5",
+            modo: 1
+        }))
     }
 }
 window.customElements.define("pantalla-tarjetachipselecciontarjetacredito", pantallaTarjetaChipSeleccionTarjetaCredito);

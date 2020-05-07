@@ -19,7 +19,14 @@ export const grabarProcces = ({
     dispatch
 }) => next => action => {
     next(action);
-    if (action.type === GRABAR) {}
+    if (action.type === GRABAR) {
+
+        dispatch(operadoraEnviar({
+            periferico: "tarjetaChip",
+            comando: "write",
+            subComando: ">G," + action.importe.toString(16).toUpperCase().padStart(4, "0")
+        }))
+    }
 };
 
 export const leerProcces = ({
@@ -27,7 +34,11 @@ export const leerProcces = ({
 }) => next => action => {
     next(action);
     if (action.type === LEER) {
-        dispatch(operadoraEnviar("#" + TARJETACHIP + "#>L" + String.fromCharCode(parseInt("0A", 16))))
+        dispatch(operadoraEnviar({
+            periferico: "tarjetaChip",
+            comando: "write",
+            subComando: ">L"
+        }))
     }
 };
 
@@ -62,7 +73,7 @@ export const interpretarProccess = ({
 }) => next => action => {
     next(action);
     if (action.type === INTERPRETAR) {
-        action.mensaje.data.split("").forEach(m => {
+        decodeURIComponent(action.mensaje.data).split("").forEach(m => {
             if (m.charCodeAt(0) != 16) {
                 dispatch(buffer(m))
             } else {

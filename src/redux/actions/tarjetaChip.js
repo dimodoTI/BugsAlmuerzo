@@ -14,7 +14,7 @@ export const interpretar = (mensaje) => ({
     mensaje: mensaje
 })
 
-export const gabar = (importe) => ({
+export const grabar = (importe) => ({
     type: GRABAR,
     importe: importe
 })

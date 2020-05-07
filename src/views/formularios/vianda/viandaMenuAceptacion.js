@@ -9,11 +9,27 @@ import {
 import {
     connect
 } from "@brunomon/helpers";
-import { modoPantalla, dispararTimer } from "../../../redux/actions/ui";
-import { guardarUsuario, guardarImporteSaldo, guardarImporteRecarga } from "../../../redux/actions/tarjetachipRecarga";
-import { menues } from "../../../redux/datos/vianda/datos/menues"
-import { idiomas } from "../../../redux/datos/vianda/idioma/idiomas"
-import { tiempos } from "../../../redux/datos/vianda/datos/tiempoEspera"
+import {
+    modoPantalla,
+    dispararTimer
+} from "../../../redux/actions/ui";
+import {
+    guardarUsuario,
+    guardarImporteSaldo,
+    guardarImporteRecarga
+} from "../../../redux/actions/tarjetachipRecarga";
+import {
+    menues
+} from "../../../redux/datos/vianda/datos/menues"
+import {
+    idiomas
+} from "../../../redux/datos/vianda/idioma/idiomas"
+import {
+    tiempos
+} from "../../../redux/datos/vianda/datos/tiempoEspera"
+import {
+    grabar
+} from "../../../redux/actions/tarjetaChip"
 
 const MODO_PANTALLA = "ui.timeStampPantalla"
 export class pantallaViandaMenuAceptacion extends connect(store, MODO_PANTALLA)(LitElement) {
@@ -33,7 +49,7 @@ export class pantallaViandaMenuAceptacion extends connect(store, MODO_PANTALLA)(
     }
 
     static get styles() {
-        return css`
+        return css `
         :host{
             display: grid;
             justify-items:center;
@@ -247,7 +263,7 @@ export class pantallaViandaMenuAceptacion extends connect(store, MODO_PANTALLA)(
         `
     }
     render() {
-        return html`
+        return html `
         <div id="fondoimagen01">
         </div>
         <div id="fondocolor">
@@ -315,6 +331,9 @@ export class pantallaViandaMenuAceptacion extends connect(store, MODO_PANTALLA)(
     }
 
     proximaPantalla(e) {
+        const credito = store.getState().tarjetaChip.credito
+        const costo = store.getState().vianda.menu.precio
+        store.dispatch(grabar(credito - costo))
         //store.dispatch(guardarImporteRecarga(parseInt(e.currentTarget.getAttribute("importe"), 10)))
         store.dispatch(modoPantalla("viandamenuexito"))
     }

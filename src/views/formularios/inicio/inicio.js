@@ -24,8 +24,9 @@ import {
     comandoCierre
 } from "../../../redux/actions/posNet";
 import {
-    leer,
-    servicio
+    leer as leerTC,
+    grabar as grabarTC,
+    servicio as servicioTC
 } from "../../../redux/actions/tarjetaChip";
 
 const MODO_PANTALLA = "ui.timeStampPantalla"
@@ -187,6 +188,8 @@ export class pantallaInicio extends connect(store, MODO_PANTALLA)(LitElement) {
                 <input type="button" class="button" value="cierre" @click="${this.cierre}">
                 <input type="button" class="button" value="chip en servicio" @click="${this.servicioOn}">
                 <input type="button" class="button" value="chip fuera de servicio" @click="${this.servicioOff}">
+                <input type="button" class="button" value="Leer chip" @click="${this.chipLeer}">
+                <input type="button" class="button" value="Grabar chip" @click="${this.chipGrabar}">
             </div>
            
         </div>
@@ -214,15 +217,22 @@ export class pantallaInicio extends connect(store, MODO_PANTALLA)(LitElement) {
         store.dispatch(comandoCierre())
     }
     servicioOn() {
-        store.dispatch(servicio(true))
+        store.dispatch(servicioTC(true))
     }
     servicioOff() {
-        store.dispatch(servicio(false))
+        store.dispatch(servicioTC(false))
+    }
+    chipLeer() {
+        store.dispatch(leerTC())
+    }
+    chipGrabar() {
+        store.dispatch(grabarTC(2000))
     }
 
     stateChanged(state, name) {
         if (name == MODO_PANTALLA && state.ui.quePantalla == "inicio") {
             store.dispatch(cancelarTimer())
+            store.dispatch(servicioTC(false))
         }
     }
 

@@ -3,10 +3,18 @@ import {
     clean as cleanUsuario
 } from "../actions/usuario";
 import {
-    DISPARAR_TIMER, setTimer, setContador, MOSTRAR_ERROR
+    DISPARAR_TIMER,
+    setTimer,
+    setContador,
+    MOSTRAR_ERROR
 } from "../actions/ui";
-import { modoPantalla, dispararTimer as dispararTimerAction } from "../actions/ui";
-import { tiempos } from "../datos/inicio/datos/tiempoEspera"
+import {
+    modoPantalla,
+    dispararTimer as dispararTimerAction
+} from "../actions/ui";
+import {
+    tiempos
+} from "../datos/inicio/datos/tiempoEspera"
 
 export const dispararTimer = ({
     dispatch
@@ -23,7 +31,7 @@ export const dispararTimer = ({
     }
 };
 
-export const mostrarError = ({
+/* export const mostrarError = ({
     dispatch
 }) => next => action => {
     next(action);
@@ -31,6 +39,6 @@ export const mostrarError = ({
         dispatch(modoPantalla(action.target))
         dispatch(dispararTimerAction(tiempos.error.segundos, action.pantallaQueLLamo, action.pantallaQueLLamo))
     }
-};
+}; */
 
-export const middleware = [dispararTimer, mostrarError];
+export const middleware = [dispararTimer];

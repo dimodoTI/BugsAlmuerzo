@@ -14,7 +14,7 @@ import {
   reducer as viandaReducer
 } from "./vianda"
 import {
-  reducer as postNetReducer
+  reducer as posNetReducer
 } from "./posNet"
 import {
   reducer as tarjetaChipReducer
@@ -24,6 +24,6 @@ export const reducers = combineReducers({
   ui: uiReducer,
   tarjetachipRecarga: tarjetachipRecargaReducer,
   vianda: viandaReducer,
-  postNet: postNetReducer,
+  posNet: posNetReducer,
   tarjetaChip: tarjetaChipReducer
 });

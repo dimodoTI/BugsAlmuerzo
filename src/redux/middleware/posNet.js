@@ -22,7 +22,7 @@ export const test = ({
 }) => next => action => {
     next(action);
     if (action.type === COMANDO_TEST || action.type === COMANDO_VENTA || action.type === COMANDO_CIERRE) {
-        lanzarComando(getState().postNet, dispatch, 0)
+        lanzarComando(getState().posNet, dispatch, 0)
     }
 };
 
@@ -33,26 +33,26 @@ export const interpretarProccess = ({
 }) => next => action => {
     next(action);
     if (action.type === INTERPRETAR) {
-        const postNet = getState().postNet
+        const posNet = getState().posNet
         //si es un timeout o no verifica el DV
-        if (action.mensaje == "fallo" || (!postNet.correcto && postNet.finDeMensaje)) {
-            if (postNet.reintentos < 3) {
+        if (action.mensaje == "fallo" || (!posNet.correcto && posNet.finDeMensaje)) {
+            if (posNet.reintentos < 3) {
                 const espera = setTimeout(() => {
-                    lanzarComando(postNet, dispatch, 0)
+                    lanzarComando(posNet, dispatch, 0)
                 }, 10000)
             } else {
                 dispatch(showError("El posNet no responde"))
             }
         } else {
             //limpio el timeout porque el posNet esta respondiendo
-            window.clearTimeout(postNet.ultimoTimeOut)
-            //window.clearTimeout(postNet.ultimoTimeOut)
-            if (postNet.finDeMensaje) {
+            window.clearTimeout(posNet.ultimoTimeOut)
+            //window.clearTimeout(posNet.ultimoTimeOut)
+            if (posNet.finDeMensaje) {
                 //limpio el timeOut del operador si lo hubiera
-                if (postNet.operadorTimeOut) window.clearTimeout(postNet.operadorTimeOut)
+                if (posNet.operadorTimeOut) window.clearTimeout(posNet.operadorTimeOut)
                 //ejecuto el proximo comando
-                if (postNet.ultimoComando < postNet.comandos.length - 1) {
-                    lanzarComando(postNet, dispatch, 1)
+                if (posNet.ultimoComando < posNet.comandos.length - 1) {
+                    lanzarComando(posNet, dispatch, 1)
                 }
             }
         }
@@ -65,31 +65,31 @@ export const ejecutarComandoProcces = ({
 }) => next => action => {
     next(action);
     if (action.type === COMANDO) {
-        const postNet = getState().postNet
+        const posNet = getState().posNet
         dispatch(operadoraEnviar({
             periferico: "posNet",
             comando: "write",
-            subComando: postNet.comandos[action.comando].comando
+            subComando: posNet.comandos[action.comando].comando
         }))
     }
 };
 
-const lanzarComando = (postNet, dispatch, proximo) => {
+const lanzarComando = (posNet, dispatch, proximo) => {
     // si el comando espera un cacrater de fin de mensaje programa el timeout
-    if (postNet.comandos[postNet.ultimoComando + proximo].fin) {
+    if (posNet.comandos[posNet.ultimoComando + proximo].fin) {
         const timeOut = setTimeout(() => {
             dispatch(interpretar("fallo"))
         }, 3000)
         // si el comando tiene un timeout por esperar acciones del operador
         let operadorTimeOut = null
-        if (postNet.comandos[postNet.ultimoComando + proximo].timeOut) {
+        if (posNet.comandos[posNet.ultimoComando + proximo].timeOut) {
             operadorTimeOut = setTimeout(() => {
                 dispatch(showError("El posNet no responde"))
-            }, postNet.comandos[postNet.ultimoComando + proximo].timeOut)
+            }, posNet.comandos[posNet.ultimoComando + proximo].timeOut)
         }
-        dispatch(ejecutarComando(postNet.ultimoComando + proximo, timeOut, operadorTimeOut))
+        dispatch(ejecutarComando(posNet.ultimoComando + proximo, timeOut, operadorTimeOut))
     } else {
-        dispatch(ejecutarComando(postNet.ultimoComando + proximo))
+        dispatch(ejecutarComando(posNet.ultimoComando + proximo))
     }
 }
 

@@ -7,6 +7,8 @@ export const SET_DATOS = "[tarjetaChip] SET_DATOS"
 export const ERROR_EN_TARJETA = "[tarjetaChip] ERROR_EN_TARJETA"
 export const SERVICIO_ACERTADO = "[tarjetaChip] SERVICIO_ACERTADO"
 export const SERVICIO_ERROR = "[tarjetaChip] SERVICIO_ERROR"
+export const CONECTADO = "[tarjetaChip] CONECTADO"
+export const DESCONECTADO = "[tarjetaChip] DESCONECTADO"
 
 
 export const interpretar = (mensaje) => ({
@@ -52,4 +54,11 @@ export const servicioAcertado = () => ({
 })
 export const servicioError = () => ({
     type: SERVICIO_ERROR
+})
+
+export const conectado = () => ({
+    type: CONECTADO
+})
+export const desconectado = () => ({
+    type: DESCONECTADO
 })

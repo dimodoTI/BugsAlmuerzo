@@ -13,6 +13,7 @@ import {
     TARJETACHIP,
     POST,
     LECTORLED,
+    IMPRESORA,
 } from "../datos/inicio/datos/dispositivos";
 import {
     interpretar as tarjetaChipInterpretar
@@ -20,7 +21,9 @@ import {
 import {
     interpretar as posNetInterpretar
 } from "../actions/posNet";
-
+import {
+    interpretar as impresoraInterpretar
+} from "../actions/impresora";
 export const enviar = ({
     dispatch
 }) => (next) => (action) => {
@@ -46,6 +49,9 @@ export const recibir = ({
                 break;
             case LECTORLED:
                 break;
+            case IMPRESORA:
+                dispatch(impresoraInterpretar(mensaje))
+                break
         }
 
         /*         if (action.mensaje.data.indexOf("$") == 0) {

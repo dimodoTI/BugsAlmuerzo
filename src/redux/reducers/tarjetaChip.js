@@ -7,7 +7,9 @@ import {
     BUFFER,
     SERVICIO_ACERTADO,
     SERVICIO_ERROR,
-    ERROR_EN_TARJETA
+    ERROR_EN_TARJETA,
+    CONECTADO,
+    DESCONECTADO
 
 } from "../actions/tarjetaChip";
 
@@ -22,6 +24,7 @@ const initialState = {
     errorServicioTimeStamp: null,
     errorEnTarjeta: null,
     respuestaTimeStamp: null,
+    conectado: false
 };
 
 export const reducer = (state = initialState, action) => {
@@ -55,6 +58,12 @@ export const reducer = (state = initialState, action) => {
             newState.colocada = action.colocada
             newState.respuestaTimeStamp = (new Date()).getTime()
             break;
+        case CONECTADO:
+            newState.conectado = true
+            break
+        case DESCONECTADO:
+            newState.conectado = false
+            break
     }
     return newState;
 };

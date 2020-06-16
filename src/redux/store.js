@@ -26,13 +26,13 @@ import {
   middleware as tarjetaChipMiddleware
 } from "./middleware/tarjetaChip"
 import {
-  TARJETACHIP
-} from "./datos/inicio/datos/dispositivos";
+  middleware as impresoramiddleware
+} from "./middleware/impresora"
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 let mdw = [
-  ...servidorBugsMiddleware, ...servidorWSMiddleware, ...uiMiddleware, ...posNetMiddleware, ...tarjetaChipMiddleware
+  ...servidorBugsMiddleware, ...servidorWSMiddleware, ...uiMiddleware, ...posNetMiddleware, ...tarjetaChipMiddleware, ...impresoramiddleware
 ]
 
 if (process.env.NODE_ENV !== 'production') {

@@ -11,7 +11,8 @@ import {
 } from "@brunomon/helpers";
 import {
     modoPantalla,
-    dispararTimer
+    dispararTimer,
+    mostrarError
 } from "../../../redux/actions/ui";
 import {
     guardarUsuario,

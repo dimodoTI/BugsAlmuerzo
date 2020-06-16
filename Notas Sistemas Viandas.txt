@@ -1,0 +1,90 @@
+Sistema Viandas
+-----------------------
+1- Al abrr el sistema deberia amanace en estado FUERA DE SERVICIO hasta comprobar todos los perifericos del sistema:
+	Lector de tarjetas chip
+	POS
+	Printer
+	Base de datos si existiera
+	Archivos de usuarios
+Podriamos definir en SETEOS que es WARNING y que es ERROR, de esta manera o salgo de servicio o sigo adelante sin hacer nada
+Podriamos indicarlo en una linea en la parte baja de la pantalla, tanto en el caso de fuera de servicio como en modo de funcionamiento ok
+sin ese periferico, ej. SIN IMPRESORA
+
+En este momento no se esta detectando el mal estado de la impresora, la pago o la prendo y todo sigue igual
+
+En este momento no se esta detectando el mal estado de la tarjeta sc, al menos abro o cierro la llave externa (solo demo) y no se entera.
+Desconecto el lector sc entero y no dice nada, no indica error.
+
+2- Los botones nos gustan que se muevan
+
+3- La imagen de fondo al momento de elegir la opcion CARGAR CREDITO no debe ser la del POSNET para no confundir con el de tarjetas chip, 
+por ahora que siga con la imagen de las comidas como la de hacer tu pedido ya que no tengo una mejor
+
+4- El texto
+Inserta tu tarjeta chip en el lector que esta parpadeando y espera que sea leido.
+reemplazar por:
+Inserta tu tarjeta chip en el lector que esta abajo y espera que sea leida
+
+5- Luego de iniciar, si pasa a EN SERVICIO seria ESTADO BIENVENIDO, (XX1) si hay TARJETA INSERTADA debe decir RETIRE TARJETA, quedarse alli hasta que sea retirada verificando periodicamente, 
+cada 5 segundos, si el cliente la saca nos va a llegar el aviso instantaneamente y terminamos.
+
+Cada vez que cae en ESTADO BIENVENIDO >>> XX1
+
+Cuando estamos en ESTADO PEDIDO REALIZADO ademas de decir RETIRE TICKET debe decir RETIRE TARJETA en la misma ventana por >>>Tiempos muestra mensaje>>>>
+ (podria decir RETIRE SU TICKEY Y TARJETA),
+aunque saquen la tarjeta debe seguir diciendolo hasta agotar dicho tiempo. Luego de ese tiempo saltar a XX1
+
+6- Al recargar tarjeta con TCredito, en el estado COLOQUE SU TARJETA y siga las instrucciones del POS no debe haber opcion de VOLVER ni CANCELAR, solo hay que esperar que vuelva con la respuesta el POS
+Si la respuesta no llega al vencer el timer >>Tiempos de espera respuesta POS VENTA>>> informaremos ERROR XXXX Retire Tarjeta de Credito y Chip por >>>>Tiempos muestra mensaje>>>>, 
+luego (XX1)
+
+7- Luego de hecer clic en la tarjeta de credito xxxx, enviar V V I, que en realidad indica: CUALQUIERA, para agilizar la respuesta.
+Esto NO SE PUEDE USAR EN LOS CAJEROS, pero en este soft SI. Simplifica las cosas para nosotros y para ellos.
+
+8- En algun lado debe haber un BOTON  de CIERRE DE LOTE que aguarde a que ocurra y lo imprima en el ticket de la impresora.
+
+9- La manera de acceder a la PANTALLA DE ADMIN o SETEOS PODRIA ser con una tarjeta chip que cuando la leas y encuentres
+ que tiene un numero de user y credito especificos, se le pide un PASS y si coincide con la de los seteos le damos acceso.
+Si el numero o credito no es el de los seteos se sigue como si nada, luego podria avanzar bien o mal.
+
+
+10- Seteos/Configuraciones Ocultos para el Operador
+COM Lector SC
+COM POS
+COM o Nombre ? Printer
+
+Lector de tarjetas chip: ok/Warning/error
+POS: ok/Warning/error
+Printer: ok/Warning/error
+Base de datos si existiera: ok/Warning/error
+Archivos de usuarios: ok/Warning/error
+
+Tiempos de espera pantallas opciones
+Tiempos de espera respuesta POS VENTA
+Tiempos de espera respuesta POS CIERRE DE LOTE
+Tiempos muestra mensaje
+
+
+11- Seteos/Configuraciones Editables por el Operador
+Hora Apertura Pedidos
+Hora Cierre Pedidos
+
+Dias de trabajo o de no trabajo.... no se como hacerlo
+
+Monto1 a recargar
+Monto2 a recargar
+Monto3 a recargar
+
+Servidor Mails
+Mail 1 envio Reportes
+Mail 2 envio Reportes
+Numero de Reintentos de envio Mail Reportes
+
+Tipo Tarjeta Credito1
+Tipo Tarjeta Credito2
+....
+Tipo Tarjeta Credito8
+
+Numero Tarjeta Admin
+Credito Tarjeta Admin
+Pass Tarjeta Admin

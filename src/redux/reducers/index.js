@@ -19,11 +19,15 @@ import {
 import {
   reducer as tarjetaChipReducer
 } from "./tarjetaChip"
+import {
+  reducer as impresoraReducer
+} from "./impresora"
 export const reducers = combineReducers({
   operadora: operadoraReducer,
   ui: uiReducer,
   tarjetachipRecarga: tarjetachipRecargaReducer,
   vianda: viandaReducer,
   posNet: posNetReducer,
-  tarjetaChip: tarjetaChipReducer
+  tarjetaChip: tarjetaChipReducer,
+  impresora: impresoraReducer
 });

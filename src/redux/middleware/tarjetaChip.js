@@ -6,7 +6,9 @@ import {
     buffer,
     setDatos,
     errorEnTarjeta,
-    servicioAcertado
+    servicioAcertado,
+    conectado,
+    desconectado
 } from "../actions/tarjetaChip";
 import {
     enviarMensaje as operadoraEnviar
@@ -14,6 +16,9 @@ import {
 import {
     TARJETACHIP
 } from "../datos/inicio/datos/dispositivos";
+import {
+    modoPantalla
+} from "../actions/ui";
 
 export const grabarProcces = ({
     dispatch
@@ -86,10 +91,17 @@ export const interpretarProccess = ({
                     switch (status) {
                         case 5:
                             colocada = false
+                            dispatch(modoPantalla("inicio"))
                             break
                         case 0:
                             colocada = true
                             break
+                        case 9: //desconectada
+                            dispatch(desconectado())
+                            break;
+                        case 1: //conectada
+                            dispatch(conectado())
+                            break;
                         default:
                             dispatch(errorEnTarjeta(status))
                             break

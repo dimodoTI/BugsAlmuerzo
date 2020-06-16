@@ -35,12 +35,19 @@ import {
 
 
 const MODO_PANTALLA = "ui.timeStampPantalla"
-export class pantallaInicio extends connect(store, MODO_PANTALLA)(LitElement) {
+const TC_CONECTADO = "tarjetaChip.conectado"
+const IMPRESORA_PRENDIDA = "impresora.prendidaTimeStamp"
+const IMPRESORA_APAGADA = "impresora.apagadaTimeStamp"
+const IMPRESORA_ONLINE = "impresora.onlineTimeStamp"
+const IMPRESORA_OFLINE = "impresora.offlineTimeStamp"
+export class pantallaInicio extends connect(store, MODO_PANTALLA, TC_CONECTADO, IMPRESORA_PRENDIDA, IMPRESORA_APAGADA, IMPRESORA_ONLINE, IMPRESORA_OFLINE)(LitElement) {
     constructor() {
         super();
         this.hidden = false
         this.idioma = "ES"
-        this.testing = true
+        this.testing = process.env.NODE_ENV == "none"
+        this.tcConectado = false
+
     }
 
     static get styles() {
@@ -151,6 +158,10 @@ export class pantallaInicio extends connect(store, MODO_PANTALLA)(LitElement) {
             84%, 100% { font-size: 3rem;}
         }
 
+        :host(:not([testing])) .botoneraTest{
+            display:none
+        }
+
         .botoneraTest{
             display:grid;
             grid-auto-flow:row;
@@ -159,11 +170,32 @@ export class pantallaInicio extends connect(store, MODO_PANTALLA)(LitElement) {
             top:0;
             left:0;
             height:100vh;
-            background-color:rgba(0,0,0,.5)
+            background-color:rgba(0,0,0,.5);
+            overflow-y:auto
         }
         .botoneraTest .button{
             font-size:1rem;
             background-color:#f6f6f6
+        }
+        .botoneraTest #TC ,.botoneraTest #impOff ,.botoneraTest #impOffline {
+            position:absolute;
+            top:0;
+            right:0;
+            background:red;
+            color:white;
+            padding:.3rem;
+            border-radius:25%;
+
+
+        }
+        :host([tc-conectado]) #TC{
+            display:none;
+        }
+        :host([impresora-prendida]) #impOff {
+            display:none;
+        }
+        :host([impresora-online]) #impOffline {
+            display:none;
         }
        
                `
@@ -188,14 +220,23 @@ export class pantallaInicio extends connect(store, MODO_PANTALLA)(LitElement) {
             </div>
            
             <div class="botoneraTest">
-                <input type="button" class="button" value="test"  @click="${this.test}">
-                <input type="button" class="button" value="venta" @click="${this.venta}">
-                <input type="button" class="button" value="cierre" @click="${this.cierre}">
-                <input type="button" class="button" value="chip en servicio" @click="${this.servicioOn}">
+                
+                <input type="button" class="button" value="PosNet test"  @click="${this.test}">
+                <input type="button" class="button" value="PosNet venta" @click="${this.venta}">
+                <input type="button" class="button" value="PosNet cierre" @click="${this.cierre}">
+                <div style="position:relative">
+                    <input type="button" class="button" value="chip en servicio" @click="${this.servicioOn}">
+                    <div id="TC">TC</div>
+                </div>
                 <input type="button" class="button" value="chip fuera de servicio" @click="${this.servicioOff}">
-                <input type="button" class="button" value="Leer chip" @click="${this.chipLeer}">
-                <input type="button" class="button" value="Grabar chip" @click="${this.chipGrabar}">
-                <input type="button" class="button" value="Impresora" @click="${this.imprimir}">
+                <input type="button" class="button" value="chip Leer" @click="${this.chipLeer}">
+                <input type="button" class="button" value="chip Grabar " @click="${this.chipGrabar}">
+                <div style="position:relative">
+                    <input type="button" class="button" value="Impresora test" @click="${this.imprimir}">
+                    <div id="impOff">OFF</div>
+                    <div id="impOffline">offline</div>
+                </div>
+                
             </div>
            
         </div>
@@ -210,7 +251,7 @@ export class pantallaInicio extends connect(store, MODO_PANTALLA)(LitElement) {
             monto: 125,
             numeroFactura: 100000089012,
             cuotas: 1,
-            codigoTarjeta: "0VI",
+            codigoTarjeta: "VVI",
             codigoPlan: "1",
             montoPropina: 0,
             codigoComercio: "03659307",
@@ -249,10 +290,31 @@ export class pantallaInicio extends connect(store, MODO_PANTALLA)(LitElement) {
 
     }
 
+
     stateChanged(state, name) {
         if (name == MODO_PANTALLA && state.ui.quePantalla == "inicio") {
             store.dispatch(cancelarTimer())
             store.dispatch(servicioTC(false))
+        }
+        if (name == TC_CONECTADO) {
+            this.tcConectado = state.tarjetaChip.conectado
+            this.update();
+        }
+        if (name == IMPRESORA_PRENDIDA) {
+            this.impresoraPrendida = true
+            this.update();
+        }
+        if (name == IMPRESORA_APAGADA) {
+            this.impresoraPrendida = false
+            this.update();
+        }
+        if (name == IMPRESORA_ONLINE) {
+            this.impresoraOnline = true
+            this.update();
+        }
+        if (name == IMPRESORA_OFLINE) {
+            this.impresoraOnline = false
+            this.update();
         }
     }
 
@@ -265,7 +327,23 @@ export class pantallaInicio extends connect(store, MODO_PANTALLA)(LitElement) {
             testing: {
                 type: Boolean,
                 reflect: true
+            },
+            tcConectado: {
+                type: Boolean,
+                reflect: true,
+                attribute: "tc-conectado"
+            },
+            impresoraPrendida: {
+                type: Boolean,
+                reflect: true,
+                attribute: "impresora-prendida"
+            },
+            impresoraOnline: {
+                type: Boolean,
+                reflect: true,
+                attribute: "impresora-online"
             }
+
         }
     }
 

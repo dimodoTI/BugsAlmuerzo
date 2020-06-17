@@ -24,16 +24,25 @@ const initialState = {
     errorServicioTimeStamp: null,
     errorEnTarjeta: null,
     respuestaTimeStamp: null,
-    conectado: false
+    conectado: false,
+    nextActions: []
 };
 
 export const reducer = (state = initialState, action) => {
     const newState = {
         ...state
     };
+
     switch (action.type) {
+        case GRABAR:
+            newState.nextActions = action.nextActions
+            break;
+        case LEER:
+            newState.nextActions = []
+            break;
         case SERVICIO:
             newState.buffer = ""
+            newState.nextActions = []
             newState.enServicio = action.activo
             break
         case BUFFER:
@@ -44,14 +53,17 @@ export const reducer = (state = initialState, action) => {
             newState.enServicioTimeStamp = (new Date()).getTime()
             break
         case SERVICIO_ERROR:
+            newState.nextActions = []
             newState.buffer = ""
             newState.errorServicioTimeStamp = (new Date()).getTime()
             break
         case ERROR_EN_TARJETA:
+            newState.nextActions = []
             newState.buffer = ""
             newState.errorEnTarjeta = (new Date()).getTime()
             break
         case SET_DATOS:
+            newState.nextActions = []
             newState.buffer = ""
             newState.usuario = action.usuario
             newState.credito = action.importe

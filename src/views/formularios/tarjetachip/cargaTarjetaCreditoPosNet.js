@@ -27,7 +27,8 @@ import {
 
 const RESPUESTA_POSNET = "posNet.respuestaTimeStamp"
 const MODO_PANTALLA = "ui.timeStampPantalla"
-export class pantallacargaTarjetaCreditoPosNet extends connect(store, MODO_PANTALLA, RESPUESTA_POSNET)(LitElement) {
+const TARJETA_CHIP = "tarjetaChip.respuestaTimeStamp"
+export class pantallacargaTarjetaCreditoPosNet extends connect(store, MODO_PANTALLA, RESPUESTA_POSNET, TARJETA_CHIP)(LitElement) {
     constructor() {
         super();
         this.hidden = true
@@ -223,6 +224,11 @@ export class pantallacargaTarjetaCreditoPosNet extends connect(store, MODO_PANTA
                 store.dispatch(modoPantalla("tarjetachiprecargaexito"))
             }
 
+        }
+        if (name == TARJETA_CHIP && state.ui.quePantalla == "cargatarjetacreditoposnet") {
+            if (!state.tarjetaChip.colocada) {
+                store.dispatch(modoPantalla("inicio"))
+            }
         }
 
     }

@@ -9,15 +9,31 @@ import {
 import {
     connect
 } from "@brunomon/helpers";
-import { modoPantalla, dispararTimer } from "../../../redux/actions/ui";
-import { guardarUsuario, guardarImporteSaldo, guardarImporteRecarga } from "../../../redux/actions/tarjetachipRecarga";
-import { tipoMenu } from "../../../redux/datos/vianda/datos/menues"
-import { guardarTipoMenu } from "../../../redux/actions/vianda"
-import { idiomas } from "../../../redux/datos/vianda/idioma/idiomas"
-import { tiempos } from "../../../redux/datos/vianda/datos/tiempoEspera"
+import {
+    modoPantalla,
+    dispararTimer
+} from "../../../redux/actions/ui";
+import {
+    guardarUsuario,
+    guardarImporteSaldo,
+    guardarImporteRecarga
+} from "../../../redux/actions/tarjetachipRecarga";
+import {
+    tipoMenu
+} from "../../../redux/datos/vianda/datos/menues"
+import {
+    guardarTipoMenu
+} from "../../../redux/actions/vianda"
+import {
+    idiomas
+} from "../../../redux/datos/vianda/idioma/idiomas"
+import {
+    tiempos
+} from "../../../redux/datos/vianda/datos/tiempoEspera"
 
 const MODO_PANTALLA = "ui.timeStampPantalla"
-export class pantallaViandaSeleccionTipoMenu extends connect(store, MODO_PANTALLA)(LitElement) {
+const TARJETA_CHIP = "tarjetaChip.respuestaTimeStamp"
+export class pantallaViandaSeleccionTipoMenu extends connect(store, MODO_PANTALLA, TARJETA_CHIP)(LitElement) {
     constructor() {
         super();
         this.hidden = true
@@ -31,7 +47,7 @@ export class pantallaViandaSeleccionTipoMenu extends connect(store, MODO_PANTALL
     }
 
     static get styles() {
-        return css`
+        return css `
         :host{
             display: grid;
             justify-items:center;
@@ -158,7 +174,7 @@ export class pantallaViandaSeleccionTipoMenu extends connect(store, MODO_PANTALL
         `
     }
     render() {
-        return html`
+        return html `
         <div id="fondoimagen01">
         </div>
         <div id="fondocolor">
@@ -199,6 +215,12 @@ export class pantallaViandaSeleccionTipoMenu extends connect(store, MODO_PANTALL
             //this.shadowRoot.querySelector("#quienEs").innerHTML = idiomas[this.idioma].paginas.seleccionTipoMenu.quienEs01 + state.tarjetachipRecarga.usuario.nombre + idiomas[this.idioma].paginas.seleccionTipoMenu.quienEs02 + state.tarjetachipRecarga.saldo
             this.update()
         }
+        if (name == TARJETA_CHIP && state.ui.quePantalla == "viandaselecciontipomenu") {
+            if (!state.tarjetaChip.colocada) {
+                store.dispatch(modoPantalla("inicio"))
+            }
+        }
+
     }
 
     static get properties() {

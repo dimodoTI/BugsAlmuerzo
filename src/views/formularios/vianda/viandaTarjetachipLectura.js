@@ -239,6 +239,8 @@ export class pantallaViandaTarjetaChipLectura extends connect(store, MODO_PANTAL
                 }))
                 store.dispatch(modoPantalla("viandaselecciontipomenu"))
 
+            } else {
+                store.dispatch(modoPantalla("inicio"))
             }
         }
         if (name == TARJETA_CHIP_ERROR) {

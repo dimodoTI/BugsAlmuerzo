@@ -71,7 +71,11 @@ export const servicioProcces = ({
     }
 };
 
-
+const ejecutarNextActions = (dispatch, nextActions) => {
+    nextActions.forEach(action => {
+        dispatch(action)
+    })
+}
 export const interpretarProccess = ({
     dispatch,
     getState
@@ -91,10 +95,12 @@ export const interpretarProccess = ({
                     switch (status) {
                         case 5:
                             colocada = false
-                            dispatch(modoPantalla("inicio"))
+                            //dispatch(modoPantalla("inicio"))
+                            ejecutarNextActions(dispatch, getState().tarjetaChip.nextActions)
                             break
                         case 0:
                             colocada = true
+                            ejecutarNextActions(dispatch, getState().tarjetaChip.nextActions)
                             break
                         case 9: //desconectada
                             dispatch(desconectado())

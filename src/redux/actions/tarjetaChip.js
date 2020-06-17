@@ -16,9 +16,10 @@ export const interpretar = (mensaje) => ({
     mensaje: mensaje
 })
 
-export const grabar = (importe) => ({
+export const grabar = (importe, nextActions) => ({
     type: GRABAR,
-    importe: importe
+    importe: importe,
+    nextActions: nextActions
 })
 
 export const leer = () => ({

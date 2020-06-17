@@ -31,7 +31,8 @@ import {
 
 
 const MODO_PANTALLA = "ui.timeStampPantalla"
-export class pantallaTarjetaChipSeleccionTarjetaCredito extends connect(store, MODO_PANTALLA)(LitElement) {
+const TARJETA_CHIP = "tarjetaChip.respuestaTimeStamp"
+export class pantallaTarjetaChipSeleccionTarjetaCredito extends connect(store, MODO_PANTALLA, TARJETA_CHIP)(LitElement) {
     constructor() {
         super();
         this.hidden = true
@@ -200,6 +201,11 @@ export class pantallaTarjetaChipSeleccionTarjetaCredito extends connect(store, M
         if (name == MODO_PANTALLA && state.ui.quePantalla == "tarjetachipselecciontarjetacredito") {
             store.dispatch(dispararTimer(tiempos.tarjetachipselecciontarjetacredito.segundos, "mensajeespera", "tarjetachipselecciontarjetacredito"))
             this.update()
+        }
+        if (name == TARJETA_CHIP && state.ui.quePantalla == "tarjetachipselecciontarjetacredito") {
+            if (!state.tarjetaChip.colocada) {
+                store.dispatch(modoPantalla("inicio"))
+            }
         }
 
     }

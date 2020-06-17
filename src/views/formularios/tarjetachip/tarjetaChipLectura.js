@@ -77,7 +77,7 @@ export class pantallaTarjetaChipLectura extends connect(store, MODO_PANTALLA, TA
             left:0;
             height: 100vh;
             width: 100vw;   
-            background-image:var(--imagen-pantalla-fondo-tarjetachip);
+            background-image:var(--imagen-pantalla-fondo02);
             background-repeat: no-repeat;
             background-position: center;
             background-size: cover;
@@ -231,6 +231,10 @@ export class pantallaTarjetaChipLectura extends connect(store, MODO_PANTALLA, TA
                     nombre: usuario.nombre
                 }))
                 store.dispatch(modoPantalla("tarjetachipseleccionimporte"))
+
+            } else {
+
+                store.dispatch(modoPantalla("inicio"))
 
             }
         }

@@ -9,20 +9,38 @@ import {
 import {
     connect
 } from "@brunomon/helpers";
-import { modoPantalla, dispararTimer, errorTitulo, errorMensaje, ERROR_MENSAJE, ERROR_TITULO, cancelarTimer } from "../../../redux/actions/ui";
-import { idiomas } from "../../../redux/datos/tarjetachip/idioma/idiomas"
-import { idiomas as idiomaInicio } from "../../../redux/datos/inicio/idioma/idiomas"
+import {
+    modoPantalla,
+    dispararTimer,
+    errorTitulo,
+    errorMensaje,
+    ERROR_MENSAJE,
+    ERROR_TITULO,
+    cancelarTimer
+} from "../../../redux/actions/ui";
+import {
+    idiomas
+} from "../../../redux/datos/tarjetachip/idioma/idiomas"
+import {
+    idiomas as idiomaInicio
+} from "../../../redux/datos/inicio/idioma/idiomas"
 
 const MODO_PANTALLA = "ui.timeStampPantalla"
-export class pantallaMensajeFueraLinea extends connect(store, MODO_PANTALLA)(LitElement) {
+const TC_CONECTADO = "tarjetaChip.conectado"
+const IMPRESORA_PRENDIDA = "impresora.prendidaTimeStamp"
+const IMPRESORA_APAGADA = "impresora.apagadaTimeStamp"
+const IMPRESORA_ONLINE = "impresora.onlineTimeStamp"
+const IMPRESORA_OFFLINE = "impresora.offlineTimeStamp"
+export class pantallaMensajeFueraLinea extends connect(store, MODO_PANTALLA, TC_CONECTADO, IMPRESORA_OFFLINE, IMPRESORA_ONLINE, IMPRESORA_PRENDIDA, IMPRESORA_APAGADA)(LitElement) {
     constructor() {
         super();
         this.hidden = true
         this.idioma = "ES"
+        this.testing = process.env.NODE_ENV == "none"
     }
 
     static get styles() {
-        return css`
+        return css `
         :host{
             display: grid;
             position: absolute;
@@ -115,13 +133,16 @@ export class pantallaMensajeFueraLinea extends connect(store, MODO_PANTALLA)(Lit
             text-align: center;
             color:var(--titulo-texto);
         }
+        :host([testing]) {
+            display: none; 
+        }
         @keyframes imacolor {
             from{opacity: 0.6;} to {opacity: 0.8;}
         }
         `
     }
     render() {
-        return html`
+        return html `
         <div id="opacidad">
         </div>
         <div id="cuerpo">
@@ -145,11 +166,23 @@ export class pantallaMensajeFueraLinea extends connect(store, MODO_PANTALLA)(Lit
         if (name == MODO_PANTALLA && state.ui.quePantalla == "error") {
             store.dispatch(cancelarTimer())
         }
+        if (name != MODO_PANTALLA) {
+            if (!state.impresora.on || !state.impresora.online || !state.tarjetaChip.conectado) {
+                this.hidden = false
+            } else {
+                this.hidden = true
+            }
+            this.update()
+        }
     }
 
     static get properties() {
         return {
             hidden: {
+                type: Boolean,
+                reflect: true
+            },
+            testing: {
                 type: Boolean,
                 reflect: true
             }

@@ -38,7 +38,8 @@ import {
 } from "../../../configuracion/usuarios.json"
 
 const MODO_PANTALLA = "ui.timeStampPantalla"
-export class pantallaViandaMenuAceptacion extends connect(store, MODO_PANTALLA)(LitElement) {
+const TARJETA_CHIP = "tarjetaChip.respuestaTimeStamp"
+export class pantallaViandaMenuAceptacion extends connect(store, MODO_PANTALLA, TARJETA_CHIP)(LitElement) {
     constructor() {
         super();
         this.hidden = true
@@ -321,6 +322,11 @@ export class pantallaViandaMenuAceptacion extends connect(store, MODO_PANTALLA)(
             this.item = state.vianda.menu
             this.update()
         }
+        if (name == TARJETA_CHIP && state.ui.quePantalla == "viandamenuaceptacion") {
+            if (!state.tarjetaChip.colocada) {
+                store.dispatch(modoPantalla("inicio"))
+            }
+        }
     }
 
     static get properties() {
@@ -345,23 +351,23 @@ export class pantallaViandaMenuAceptacion extends connect(store, MODO_PANTALLA)(
         const maniana = new Date(hoy.setDate(hoy.getDate() + 1))
         const fecha = maniana.getDay().toString().padStart(2, "0") + "/" + (maniana.getMonth() + 1).toString().padStart(2, "0") + "/" + maniana.getFullYear().toString()
 
-        store.dispatch(grabar(credito - menu.precio))
+        store.dispatch(grabar(credito - menu.precio, [
+            enviarMensaje({
+                periferico: "impresora",
+                comando: "print",
+                subComando: {
+                    usuario: usuario.id,
+                    nombre: usuario.nombre,
+                    fecha: fecha,
+                    descripcion: (menu.titulo.substr(0, 18) + " $" + menu.precio),
+                    numero: menu.id
+                }
+            }),
+            modoPantalla("viandamenuexito")
+        ]))
 
 
 
-
-        store.dispatch(enviarMensaje({
-            periferico: "impresora",
-            comando: "print",
-            subComando: {
-                usuario: usuario.id,
-                nombre: usuario.nombre,
-                fecha: fecha,
-                descripcion: (menu.titulo.substr(0, 18) + " $" + menu.precio),
-                numero: menu.id
-            }
-        }))
-        store.dispatch(modoPantalla("viandamenuexito"))
     }
 }
 window.customElements.define("pantalla-viandamenuaceptacion", pantallaViandaMenuAceptacion);

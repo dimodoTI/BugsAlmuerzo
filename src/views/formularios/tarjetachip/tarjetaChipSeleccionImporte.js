@@ -9,14 +9,28 @@ import {
 import {
     connect
 } from "@brunomon/helpers";
-import { modoPantalla, dispararTimer } from "../../../redux/actions/ui";
-import { guardarUsuario, guardarImporteSaldo, guardarImporteRecarga } from "../../../redux/actions/tarjetachipRecarga";
-import { idiomas } from "../../../redux/datos/tarjetachip/idioma/idiomas"
-import { importes } from "../../../redux/datos/tarjetachip/datos/importePracarga"
-import { tiempos } from "../../../redux/datos/tarjetachip/datos/tiempoEspera"
+import {
+    modoPantalla,
+    dispararTimer
+} from "../../../redux/actions/ui";
+import {
+    guardarUsuario,
+    guardarImporteSaldo,
+    guardarImporteRecarga
+} from "../../../redux/actions/tarjetachipRecarga";
+import {
+    idiomas
+} from "../../../redux/datos/tarjetachip/idioma/idiomas"
+import {
+    importes
+} from "../../../redux/datos/tarjetachip/datos/importePracarga"
+import {
+    tiempos
+} from "../../../redux/datos/tarjetachip/datos/tiempoEspera"
 
 const MODO_PANTALLA = "ui.timeStampPantalla"
-export class pantallaTarjetaChipSeleccionImporte extends connect(store, MODO_PANTALLA)(LitElement) {
+const TARJETA_CHIP = "tarjetaChip.respuestaTimeStamp"
+export class pantallaTarjetaChipSeleccionImporte extends connect(store, MODO_PANTALLA, TARJETA_CHIP)(LitElement) {
     constructor() {
         super();
         this.hidden = true
@@ -24,7 +38,7 @@ export class pantallaTarjetaChipSeleccionImporte extends connect(store, MODO_PAN
     }
 
     static get styles() {
-        return css`
+        return css `
         :host{
             display: grid;
             justify-items:center;
@@ -71,7 +85,7 @@ export class pantallaTarjetaChipSeleccionImporte extends connect(store, MODO_PAN
             left:0;
             height: 100vh;
             width: 100vw;   
-            background-image:var(--imagen-pantalla-fondo-tarjetachip);
+            background-image:var(--imagen-pantalla-fondo02);
             background-repeat: no-repeat;
             background-position: center;
             background-size: cover;
@@ -145,7 +159,7 @@ export class pantallaTarjetaChipSeleccionImporte extends connect(store, MODO_PAN
         `
     }
     render() {
-        return html`
+        return html `
         <div id="fondoimagen01">
         </div>
         <div id="fondocolor">
@@ -184,6 +198,11 @@ export class pantallaTarjetaChipSeleccionImporte extends connect(store, MODO_PAN
     stateChanged(state, name) {
         if (name == MODO_PANTALLA && state.ui.quePantalla == "tarjetachipseleccionimporte") {
             store.dispatch(dispararTimer(tiempos.tarjetachipseleccionimporte.segundos, "mensajeespera", "tarjetachipseleccionimporte"))
+        }
+        if (name == TARJETA_CHIP && state.ui.quePantalla == "tarjetachipseleccionimporte") {
+            if (!state.tarjetaChip.colocada) {
+                store.dispatch(modoPantalla("inicio"))
+            }
         }
     }
 

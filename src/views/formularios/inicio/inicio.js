@@ -83,11 +83,11 @@ export class pantallaInicio extends connect(store, MODO_PANTALLA, TC_CONECTADO, 
             margin: 1rem .5rem;
             cursor: pointer;
             box-shadow:var(--shadow-elevation-8-box);
-            /* animation-duration: 20s;
+            animation-duration: 20s;
         	animation-timing-function: ease-in-out;
             animation-delay: 1s;
             animation-iteration-count: infinite;          
-            animation-name: aniBoton; */
+            animation-name: aniBoton;
         }
         #fondoimagen01{
             position:absolute;
@@ -175,7 +175,8 @@ export class pantallaInicio extends connect(store, MODO_PANTALLA, TC_CONECTADO, 
         }
         .botoneraTest .button{
             font-size:1rem;
-            background-color:#f6f6f6
+            background-color:#f6f6f6;
+            animation-name: none;
         }
         .botoneraTest #TC ,.botoneraTest #impOff ,.botoneraTest #impOffline {
             position:absolute;
@@ -295,6 +296,9 @@ export class pantallaInicio extends connect(store, MODO_PANTALLA, TC_CONECTADO, 
         if (name == MODO_PANTALLA && state.ui.quePantalla == "inicio") {
             store.dispatch(cancelarTimer())
             store.dispatch(servicioTC(false))
+            if (state.tarjetaChip.colocada) {
+
+            }
         }
         if (name == TC_CONECTADO) {
             this.tcConectado = state.tarjetaChip.conectado

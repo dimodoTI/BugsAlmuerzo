@@ -296,9 +296,6 @@ export class pantallaInicio extends connect(store, MODO_PANTALLA, TC_CONECTADO, 
         if (name == MODO_PANTALLA && state.ui.quePantalla == "inicio") {
             store.dispatch(cancelarTimer())
             store.dispatch(servicioTC(false))
-            if (state.tarjetaChip.colocada) {
-
-            }
         }
         if (name == TC_CONECTADO) {
             this.tcConectado = state.tarjetaChip.conectado

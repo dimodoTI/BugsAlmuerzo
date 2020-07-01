@@ -1,6 +1,7 @@
 import {
     INTERPRETAR,
-    PEDIR_ARCHIVO
+    PEDIR_ARCHIVO,
+    GUARDAR_LOG_VENTA
 
 } from "../actions/aplicacion";
 import {
@@ -15,7 +16,7 @@ export const pedirArchivo = ({
     getState
 }) => next => action => {
     next(action);
-    if (action.type === PEDIR_ARCHIVO) {
+    if (action.type === PEDIR_ARCHIVO || action.type == GUARDAR_LOG_VENTA) {
         dispatch(enviarMensaje(action.mensaje))
     }
 };

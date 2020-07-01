@@ -34,8 +34,8 @@ import {
 
 const MODO_PANTALLA = "ui.timeStampPantalla"
 const TARJETA_CHIP = "tarjetaChip.respuestaTimeStamp"
-const APLICACION = "aplicacion.timeStamp"
-export class pantallaViandaSeleccionMenu extends connect(store, MODO_PANTALLA, TARJETA_CHIP, APLICACION)(LitElement) {
+
+export class pantallaViandaSeleccionMenu extends connect(store, MODO_PANTALLA, TARJETA_CHIP)(LitElement) {
     constructor() {
         super();
         this.hidden = true
@@ -219,10 +219,11 @@ export class pantallaViandaSeleccionMenu extends connect(store, MODO_PANTALLA, T
     }
     stateChanged(state, name) {
         if (name == MODO_PANTALLA && state.ui.quePantalla == "viandaseleccionmenu") {
-            store.dispatch(dispararTimer(tiempos.viandaseleccionmenu.segundos, "mensajeespera", "viandaseleccionmenu"))
+            this.items = state.vianda.tipoMenu.menu
+            /* store.dispatch(dispararTimer(tiempos.viandaseleccionmenu.segundos, "mensajeespera", "viandaseleccionmenu"))
             this.items = this.menues.filter(i => {
                 return i.idTipo == state.vianda.tipoMenu.id
-            })
+            }) */
             this.nombreMenu = state.vianda.tipoMenu.nombre
             this.update()
         }
@@ -230,10 +231,9 @@ export class pantallaViandaSeleccionMenu extends connect(store, MODO_PANTALLA, T
             if (!state.tarjetaChip.colocada) {
                 store.dispatch(modoPantalla("inicio"))
             }
+
         }
-        if (name == APLICACION) {
-            this.menues = state.aplicacion.entities.menu
-        }
+
     }
 
     static get properties() {

@@ -7,11 +7,8 @@ import {
 
 
 const initialState = {
-    timeStamp: null,
-    entities: {
-        menu: null,
-        menuTipo: null
-    }
+    menuTimeStamp: null,
+    menu: null
 };
 
 export const reducer = (state = initialState, action) => {
@@ -20,16 +17,9 @@ export const reducer = (state = initialState, action) => {
     };
     switch (action.type) {
         case INTERPRETAR:
-            if (action.mensaje.subComando == "/data/menu.json") {
-                newState.entities.menu = action.mensaje.data
-            }
-            if (action.mensaje.subComando == "/data/menuTipo.json") {
-                newState.entities.menuTipo = action.mensaje.data
-            }
-            if (newState.entities.menu && newState.entities.menuTipo) {
-                newState.timeStamp = (new Date()).getTime()
-            }
+            newState.menu = action.mensaje.data
+            newState.menuTimeStamp = (new Date()).getTime()
             break;
     }
     return newState;
-};
+}

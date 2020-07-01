@@ -31,7 +31,7 @@ import {
 
 const MODO_PANTALLA = "ui.timeStampPantalla"
 const TARJETA_CHIP = "tarjetaChip.respuestaTimeStamp"
-const APLICACION = "aplicacion.timeStamp"
+const APLICACION = "aplicacion.menuTimeStamp"
 export class pantallaViandaSeleccionTipoMenu extends connect(store, MODO_PANTALLA, TARJETA_CHIP, APLICACION)(LitElement) {
     constructor() {
         super();
@@ -220,7 +220,7 @@ export class pantallaViandaSeleccionTipoMenu extends connect(store, MODO_PANTALL
             }
         }
         if (name == APLICACION) {
-            this.tipoMenu = state.aplicacion.entities.menuTipo
+            this.tipoMenu = state.aplicacion.menu
             this.update()
         }
 

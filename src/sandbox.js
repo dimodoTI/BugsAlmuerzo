@@ -47,11 +47,11 @@ connection.onopen = () => {
     comando: "getJsonFile",
     subComando: "/data/menu.json"
   }))
-  store.dispatch(pedirArchivo({
-    periferico: "aplicacion",
-    comando: "getJsonFile",
-    subComando: "/data/menuTipo.json"
-  }))
+  /*   store.dispatch(pedirArchivo({
+      periferico: "aplicacion",
+      comando: "getJsonFile",
+      subComando: "/data/menuTipo.json"
+    })) */
 };
 
 connection.onerror = (error) => {

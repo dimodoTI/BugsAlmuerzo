@@ -36,6 +36,9 @@ import {
 import {
     usuarios
 } from "../../../configuracion/usuarios.json"
+import {
+    guardarLogVenta
+} from "../../../redux/actions/aplicacion"
 
 const MODO_PANTALLA = "ui.timeStampPantalla"
 const TARJETA_CHIP = "tarjetaChip.respuestaTimeStamp"
@@ -348,8 +351,12 @@ export class pantallaViandaMenuAceptacion extends connect(store, MODO_PANTALLA, 
         const usuario = store.getState().tarjetachipRecarga.usuario
 
         const hoy = new Date()
-        const maniana = new Date(hoy.setDate(hoy.getDate() + 1))
-        const fecha = maniana.getDay().toString().padStart(2, "0") + "/" + (maniana.getMonth() + 1).toString().padStart(2, "0") + "/" + maniana.getFullYear().toString()
+        let maniana = new Date(hoy.setDate(hoy.getDate() + 1))
+        while ((maniana.getDay() == 0 || maniana.getDay() == 6)) {
+            maniana = new Date(maniana.setDate(maniana.getDate() + 1))
+        }
+
+        const fecha = maniana.getDate().toString().padStart(2, "0") + "/" + (maniana.getMonth() + 1).toString().padStart(2, "0") + "/" + maniana.getFullYear().toString()
 
         store.dispatch(grabar(credito - menu.precio, [
             enviarMensaje({
@@ -363,8 +370,26 @@ export class pantallaViandaMenuAceptacion extends connect(store, MODO_PANTALLA, 
                     numero: menu.id
                 }
             }),
+            guardarLogVenta({
+                periferico: "aplicacion",
+                comando: "saveLog",
+                subComando: {
+                    path: "/data/logs/Ventas_" + fecha.replace(/\//g, "_") + ".json",
+                    data: JSON.stringify({
+                        usuario: usuario.id,
+                        nombre: usuario.nombre,
+                        saldo: credito,
+                        fecha: new Date(),
+                        descripcion: menu.titulo,
+                        precio: menu.precio,
+                        numero: menu.id
+                    }),
+                    separador: ","
+                }
+            }),
             modoPantalla("viandamenuexito")
         ]))
+
 
 
 

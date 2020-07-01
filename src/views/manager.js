@@ -1,27 +1,76 @@
-import { html, LitElement, css } from "lit-element";
-import { store } from "../redux/store";
-import { boton } from "./css/boton";
-import { LOGIN, LOGOUT } from "../../assets/icons/icons";
-import { conectar } from "../redux/actions/servidorBugs";
-import { pantallaInicio } from "../views/formularios/inicio/inicio";
-import { cuentaRegresiva } from "../views/formularios/componentes/cuentaRegresiva";
-import { mensajeEspera } from "../views/formularios/componentes/mensajeEspera";
-import { pantallaMensajeError } from "../views/formularios/inicio/mensajeError";
-import { pantallaMensajeFueraLinea } from "../views/formularios/inicio/mensajeFueraLinea";
+import {
+  html,
+  LitElement,
+  css
+} from "lit-element";
+import {
+  store
+} from "../redux/store";
+import {
+  boton
+} from "./css/boton";
+import {
+  LOGIN,
+  LOGOUT
+} from "../../assets/icons/icons";
+import {
+  conectar
+} from "../redux/actions/servidorBugs";
+import {
+  pantallaInicio
+} from "../views/formularios/inicio/inicio";
+import {
+  cuentaRegresiva
+} from "../views/formularios/componentes/cuentaRegresiva";
+import {
+  mensajeEspera
+} from "../views/formularios/componentes/mensajeEspera";
+import {
+  pantallaMensajeError
+} from "../views/formularios/inicio/mensajeError";
+import {
+  pantallaMensajeFueraLinea
+} from "../views/formularios/inicio/mensajeFueraLinea";
 
-import { pantallaTarjetaChipLectura } from "../views/formularios/tarjetachip/tarjetaChipLectura";
-import { pantallaTarjetaChipSeleccionImporte } from "../views/formularios/tarjetachip/tarjetaChipSeleccionImporte";
-import { pantallaTarjetaChipSeleccionTarjetaCredito } from "../views/formularios/tarjetachip/tarjetachipSeleccionTarjetaCredito";
-import { pantallacargaTarjetaCreditoPosNet } from "../views/formularios/tarjetachip/cargaTarjetaCreditoPosNet";
-import { pantallaTarjetaChipRecargaExito } from "../views/formularios/tarjetachip/tarjetachipRecargaExito";
+import {
+  pantallaTarjetaChipLectura
+} from "../views/formularios/tarjetachip/tarjetaChipLectura";
+import {
+  pantallaTarjetaChipSeleccionImporte
+} from "../views/formularios/tarjetachip/tarjetaChipSeleccionImporte";
+import {
+  pantallaTarjetaChipSeleccionTarjetaCredito
+} from "../views/formularios/tarjetachip/tarjetachipSeleccionTarjetaCredito";
+import {
+  pantallacargaTarjetaCreditoPosNet
+} from "../views/formularios/tarjetachip/cargaTarjetaCreditoPosNet";
+import {
+  pantallaTarjetaChipRecargaExito
+} from "../views/formularios/tarjetachip/tarjetachipRecargaExito";
 
-import { pantallaViandaTarjetaChipLectura } from "../views/formularios/vianda/viandaTarjetachipLectura";
-import { pantallaViandaSeleccionTipoMenu } from "../views/formularios/vianda/viandaSeleccionTipoMenu";
-import { pantallaViandaSeleccionMenu } from "../views/formularios/vianda/viandaSeleccionMenu";
-import { pantallaViandaMenuAceptacion } from "../views/formularios/vianda/viandaMenuAceptacion";
-import { pantallaViandaMenuExito } from "../views/formularios/vianda/viandaMenuExito";
+import {
+  pantallaViandaTarjetaChipLectura
+} from "../views/formularios/vianda/viandaTarjetachipLectura";
+import {
+  pantallaViandaSeleccionTipoMenu
+} from "../views/formularios/vianda/viandaSeleccionTipoMenu";
+import {
+  pantallaViandaSeleccionMenu
+} from "../views/formularios/vianda/viandaSeleccionMenu";
+import {
+  pantallaViandaMenuAceptacion
+} from "../views/formularios/vianda/viandaMenuAceptacion";
+import {
+  pantallaViandaMenuExito
+} from "../views/formularios/vianda/viandaMenuExito";
 
-import { connect } from "@brunomon/helpers/connect";
+import {
+  connect
+} from "@brunomon/helpers/connect";
+
+import {
+  pantallaQuitarTarjeta
+} from "../views/formularios/inicio/mensajeQuitarTarjeta"
 
 const QUEPANTALLA = "ui.timeStampPantalla";
 export class viewManager extends connect(store, QUEPANTALLA)(LitElement) {
@@ -31,7 +80,7 @@ export class viewManager extends connect(store, QUEPANTALLA)(LitElement) {
   }
 
   static get styles() {
-    return css`
+    return css `
       :host {
         height: 100%;
         width: 100%;
@@ -47,10 +96,11 @@ export class viewManager extends connect(store, QUEPANTALLA)(LitElement) {
     `;
   }
   render() {
-    return html`<cuenta-regresiva></cuenta-regresiva>
+    return html `<cuenta-regresiva></cuenta-regresiva>
       <mensaje-espera id="mensajeespera"></mensaje-espera>
       <pantalla-mensajeerror id="mensajeerror"></pantalla-mensajeerror>
       <pantalla-mensajefueralinea id="fueralinea"></pantalla-mensajefueralinea>
+      <pantalla-quitar-tarjeta id="quitarTarjeta"></pantalla-quitar-tarjeta>
 
       <pantalla-inicio id="inicio"></pantalla-inicio>
       <pantalla-tarjetachiplectura
@@ -98,7 +148,8 @@ export class viewManager extends connect(store, QUEPANTALLA)(LitElement) {
       if (
         state.ui.quePantalla != "mensajeespera" &&
         state.ui.quePantalla != "error" &&
-        state.ui.quePantalla != "fueralinea"
+        state.ui.quePantalla != "fueralinea" &&
+        state.ui.quePantalla != "quitarTarjeta"
       ) {
         this.shadowRoot.querySelector("#inicio").hidden =
           state.ui.quePantalla != "inicio";
@@ -132,6 +183,8 @@ export class viewManager extends connect(store, QUEPANTALLA)(LitElement) {
         state.ui.quePantalla != "mensajeespera";
       this.shadowRoot.querySelector("#mensajeerror").hidden =
         state.ui.quePantalla != "error";
+      this.shadowRoot.querySelector("#quitarTarjeta").hidden =
+        state.ui.quePantalla != "quitarTarjeta";
 
       this.update();
     }

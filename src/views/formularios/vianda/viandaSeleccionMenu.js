@@ -21,9 +21,7 @@ import {
 import {
     tarjetaViandaMenu
 } from "../componentes/tarjetaViandaMenu"
-import {
-    menues
-} from "../../../redux/datos/vianda/datos/menues"
+
 import {
     guardarMenu
 } from "../../../redux/actions/vianda";
@@ -36,11 +34,13 @@ import {
 
 const MODO_PANTALLA = "ui.timeStampPantalla"
 const TARJETA_CHIP = "tarjetaChip.respuestaTimeStamp"
-export class pantallaViandaSeleccionMenu extends connect(store, MODO_PANTALLA, TARJETA_CHIP)(LitElement) {
+const APLICACION = "aplicacion.timeStamp"
+export class pantallaViandaSeleccionMenu extends connect(store, MODO_PANTALLA, TARJETA_CHIP, APLICACION)(LitElement) {
     constructor() {
         super();
         this.hidden = true
         this.items = []
+        this.menues = []
         this.nombreMenu = ""
         this.idioma = "ES"
     }
@@ -220,7 +220,7 @@ export class pantallaViandaSeleccionMenu extends connect(store, MODO_PANTALLA, T
     stateChanged(state, name) {
         if (name == MODO_PANTALLA && state.ui.quePantalla == "viandaseleccionmenu") {
             store.dispatch(dispararTimer(tiempos.viandaseleccionmenu.segundos, "mensajeespera", "viandaseleccionmenu"))
-            this.items = menues.filter(i => {
+            this.items = this.menues.filter(i => {
                 return i.idTipo == state.vianda.tipoMenu.id
             })
             this.nombreMenu = state.vianda.tipoMenu.nombre
@@ -230,6 +230,9 @@ export class pantallaViandaSeleccionMenu extends connect(store, MODO_PANTALLA, T
             if (!state.tarjetaChip.colocada) {
                 store.dispatch(modoPantalla("inicio"))
             }
+        }
+        if (name == APLICACION) {
+            this.menues = state.aplicacion.entities.menu
         }
     }
 

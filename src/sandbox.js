@@ -23,6 +23,9 @@ import {
   recibirMensaje,
   enviarMensaje
 } from "./redux/actions/operadora";
+import {
+  pedirArchivo
+} from "./redux/actions/aplicacion"
 
 export let connection = null;
 
@@ -38,6 +41,17 @@ connection.onopen = () => {
     comando: "info",
     data: "websocket conectado!!"
   }))
+
+  store.dispatch(pedirArchivo({
+    periferico: "aplicacion",
+    comando: "getJsonFile",
+    subComando: "/data/menu.json"
+  }))
+  store.dispatch(pedirArchivo({
+    periferico: "aplicacion",
+    comando: "getJsonFile",
+    subComando: "/data/menuTipo.json"
+  }))
 };
 
 connection.onerror = (error) => {
@@ -47,5 +61,3 @@ connection.onerror = (error) => {
 connection.onmessage = (e) => {
   store.dispatch(recibirMensaje(e));
 };
-
-//store.dispatch(modoPantalla("inicio"))

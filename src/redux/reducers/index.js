@@ -22,6 +22,9 @@ import {
 import {
   reducer as impresoraReducer
 } from "./impresora"
+import {
+  reducer as aplicacionReducer
+} from "./aplicacion"
 export const reducers = combineReducers({
   operadora: operadoraReducer,
   ui: uiReducer,
@@ -29,5 +32,6 @@ export const reducers = combineReducers({
   vianda: viandaReducer,
   posNet: posNetReducer,
   tarjetaChip: tarjetaChipReducer,
-  impresora: impresoraReducer
+  impresora: impresoraReducer,
+  aplicacion: aplicacionReducer
 });

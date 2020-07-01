@@ -28,11 +28,19 @@ import {
 import {
   middleware as impresoramiddleware
 } from "./middleware/impresora"
-
+import {
+  middleware as aplicacionMiddleware
+} from "./middleware/aplicacion"
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 let mdw = [
-  ...servidorBugsMiddleware, ...servidorWSMiddleware, ...uiMiddleware, ...posNetMiddleware, ...tarjetaChipMiddleware, ...impresoramiddleware
+  ...servidorBugsMiddleware,
+  ...servidorWSMiddleware,
+  ...uiMiddleware,
+  ...posNetMiddleware,
+  ...tarjetaChipMiddleware,
+  ...impresoramiddleware,
+  ...aplicacionMiddleware
 ]
 
 if (process.env.NODE_ENV !== 'production') {

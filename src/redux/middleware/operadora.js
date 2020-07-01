@@ -24,6 +24,10 @@ import {
 import {
     interpretar as impresoraInterpretar
 } from "../actions/impresora";
+import {
+    interpretar as aplicacionInterpretar
+} from "../actions/aplicacion";
+
 export const enviar = ({
     dispatch
 }) => (next) => (action) => {
@@ -52,6 +56,9 @@ export const recibir = ({
             case IMPRESORA:
                 dispatch(impresoraInterpretar(mensaje))
                 break
+            case "aplicacion":
+                dispatch(aplicacionInterpretar(mensaje))
+                break;
         }
 
         /*         if (action.mensaje.data.indexOf("$") == 0) {

@@ -18,9 +18,7 @@ import {
     guardarImporteSaldo,
     guardarImporteRecarga
 } from "../../../redux/actions/tarjetachipRecarga";
-import {
-    tipoMenu
-} from "../../../redux/datos/vianda/datos/menues"
+
 import {
     guardarTipoMenu
 } from "../../../redux/actions/vianda"
@@ -33,12 +31,13 @@ import {
 
 const MODO_PANTALLA = "ui.timeStampPantalla"
 const TARJETA_CHIP = "tarjetaChip.respuestaTimeStamp"
-export class pantallaViandaSeleccionTipoMenu extends connect(store, MODO_PANTALLA, TARJETA_CHIP)(LitElement) {
+const APLICACION = "aplicacion.timeStamp"
+export class pantallaViandaSeleccionTipoMenu extends connect(store, MODO_PANTALLA, TARJETA_CHIP, APLICACION)(LitElement) {
     constructor() {
         super();
         this.hidden = true
         this.idioma = "ES"
-
+        this.tipoMenu = [{}, {}, {}, {}]
         var meses = new Array("Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre");
         var diasSemana = new Array("Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado");
         var f = new Date();
@@ -197,10 +196,10 @@ export class pantallaViandaSeleccionTipoMenu extends connect(store, MODO_PANTALL
                 ${this.paraDia}
             </div>
             <div id="botonera">
-                <input type="button" class="buttonImporte" .item="${tipoMenu[0]}" value="${tipoMenu[0].nombre}" @click="${this.proximaPantalla}">
-                <input type="button" class="buttonImporte" .item="${tipoMenu[1]}" value="${tipoMenu[1].nombre}" @click="${this.proximaPantalla}">
-                <input type="button" class="buttonImporte" .item="${tipoMenu[2]}" value="${tipoMenu[2].nombre}" @click="${this.proximaPantalla}">
-                <input type="button" class="buttonImporte" .item="${tipoMenu[3]}" value="${tipoMenu[3].nombre}" @click="${this.proximaPantalla}">
+                <input type="button" class="buttonImporte" .item="${this.tipoMenu[0]}" value="${this.tipoMenu[0].nombre}" @click="${this.proximaPantalla}">
+                <input type="button" class="buttonImporte" .item="${this.tipoMenu[1]}" value="${this.tipoMenu[1].nombre}" @click="${this.proximaPantalla}">
+                <input type="button" class="buttonImporte" .item="${this.tipoMenu[2]}" value="${this.tipoMenu[2].nombre}" @click="${this.proximaPantalla}">
+                <input type="button" class="buttonImporte" .item="${this.tipoMenu[3]}" value="${this.tipoMenu[3].nombre}" @click="${this.proximaPantalla}">
             </div>
             <div id="pie">
                 <input type="button" class="buttonAtras" value=${idiomas[this.idioma].paginas.general.volver} @click="${this.volver}">
@@ -219,6 +218,10 @@ export class pantallaViandaSeleccionTipoMenu extends connect(store, MODO_PANTALL
             if (!state.tarjetaChip.colocada) {
                 store.dispatch(modoPantalla("inicio"))
             }
+        }
+        if (name == APLICACION) {
+            this.tipoMenu = state.aplicacion.entities.menuTipo
+            this.update()
         }
 
     }

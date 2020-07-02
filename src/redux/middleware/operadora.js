@@ -14,6 +14,7 @@ import {
     POST,
     LECTORLED,
     IMPRESORA,
+    APLICACION
 } from "../datos/inicio/datos/dispositivos";
 import {
     interpretar as tarjetaChipInterpretar
@@ -56,15 +57,11 @@ export const recibir = ({
             case IMPRESORA:
                 dispatch(impresoraInterpretar(mensaje))
                 break
-            case "aplicacion":
+            case APLICACION:
                 dispatch(aplicacionInterpretar(mensaje))
                 break;
         }
 
-        /*         if (action.mensaje.data.indexOf("$") == 0) {
-                        dispatch(recibirBugs(action.mensaje.data))
-                    }
-             */ //console.log(action.mensaje)
     }
 };
 

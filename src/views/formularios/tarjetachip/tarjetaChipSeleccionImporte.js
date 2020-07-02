@@ -21,20 +21,20 @@ import {
 import {
     idiomas
 } from "../../../redux/datos/tarjetachip/idioma/idiomas"
-import {
-    importes
-} from "../../../redux/datos/tarjetachip/datos/importePracarga"
+
 import {
     tiempos
 } from "../../../redux/datos/tarjetachip/datos/tiempoEspera"
 
 const MODO_PANTALLA = "ui.timeStampPantalla"
 const TARJETA_CHIP = "tarjetaChip.respuestaTimeStamp"
-export class pantallaTarjetaChipSeleccionImporte extends connect(store, MODO_PANTALLA, TARJETA_CHIP)(LitElement) {
+const IMPORTES = "aplicacion.importesTimeStamp"
+export class pantallaTarjetaChipSeleccionImporte extends connect(store, MODO_PANTALLA, TARJETA_CHIP, IMPORTES)(LitElement) {
     constructor() {
         super();
         this.hidden = true
         this.idioma = "ES"
+        this.importes = {}
     }
 
     static get styles() {
@@ -180,13 +180,13 @@ export class pantallaTarjetaChipSeleccionImporte extends connect(store, MODO_PAN
                 ${idiomas[this.idioma].paginas.seleccionImporte.titulo}
             </div>
             <div>
-                <input type="button" id="impMenor" class="buttonImporte" importe=${importes.precarga.menor.importe} value=${importes.precarga.menor.descripcion} @click="${this.proximaPantalla}">
+                <input type="button" id="impMenor" class="buttonImporte" importe=${this.importes.menor.importe} value=${this.importes.menor.descripcion} @click="${this.proximaPantalla}">
             </div>
             <div>
-                <input type="button" id="impMedio" class="buttonImporte" importe=${importes.precarga.medio.importe} value=${importes.precarga.medio.descripcion} @click="${this.proximaPantalla}">
+                <input type="button" id="impMedio" class="buttonImporte" importe=${this.importes.medio.importe} value=${this.importes.medio.descripcion} @click="${this.proximaPantalla}">
             </div>
             <div>
-                <input type="button" id="impMayor" class="buttonImporte" importe=${importes.precarga.mayor.importe} value=${importes.precarga.mayor.descripcion} @click="${this.proximaPantalla}">
+                <input type="button" id="impMayor" class="buttonImporte" importe=${this.importes.mayor.importe} value=${this.importes.mayor.descripcion} @click="${this.proximaPantalla}">
             </div>
             <div id="pie">
                 <input type="button" class="buttonAtras" value=${idiomas.ES.paginas.general.volver} @click="${this.volver}">
@@ -196,6 +196,9 @@ export class pantallaTarjetaChipSeleccionImporte extends connect(store, MODO_PAN
 
     }
     stateChanged(state, name) {
+        if (name == IMPORTES) {
+            this.importes = state.aplicacion.importes
+        }
         if (name == MODO_PANTALLA && state.ui.quePantalla == "tarjetachipseleccionimporte") {
             store.dispatch(dispararTimer(tiempos.tarjetachipseleccionimporte.segundos, "mensajeespera", "tarjetachipseleccionimporte"))
         }

@@ -11,16 +11,15 @@ import {
 } from "@brunomon/helpers";
 import {
     modoPantalla,
-    dispararTimer
+    dispararTimer,
+    mostrarError
 } from "../../../redux/actions/ui";
 import {
     guardarUsuario,
     guardarImporteSaldo,
     guardarImporteRecarga
 } from "../../../redux/actions/tarjetachipRecarga";
-import {
-    menues
-} from "../../../redux/datos/vianda/datos/menues"
+
 import {
     idiomas
 } from "../../../redux/datos/vianda/idioma/idiomas"
@@ -33,9 +32,7 @@ import {
 import {
     enviarMensaje
 } from "../../../redux/actions/operadora";
-import {
-    usuarios
-} from "../../../configuracion/usuarios.json"
+
 import {
     guardarLogVenta
 } from "../../../redux/actions/aplicacion"
@@ -125,6 +122,8 @@ export class pantallaViandaMenuAceptacion extends connect(store, MODO_PANTALLA, 
             opacity: 0.7;
         }
         #fondocuerpo{
+            position:absolute;
+            top:0;  
             z-index: 10;
             display: grid;
             grid-template-rows: 8% 10% 10% 15% 19% 11% 10%  auto;
@@ -350,45 +349,51 @@ export class pantallaViandaMenuAceptacion extends connect(store, MODO_PANTALLA, 
         const credito = store.getState().tarjetachipRecarga.saldo
         const usuario = store.getState().tarjetachipRecarga.usuario
 
-        const hoy = new Date()
-        let maniana = new Date(hoy.setDate(hoy.getDate() + 1))
-        while ((maniana.getDay() == 0 || maniana.getDay() == 6)) {
-            maniana = new Date(maniana.setDate(maniana.getDate() + 1))
-        }
+        if (credito >= menu.precio) {
 
-        const fecha = maniana.getDate().toString().padStart(2, "0") + "/" + (maniana.getMonth() + 1).toString().padStart(2, "0") + "/" + maniana.getFullYear().toString()
+            const hoy = new Date()
+            let maniana = new Date(hoy.setDate(hoy.getDate() + 1))
+            while ((maniana.getDay() == 0 || maniana.getDay() == 6)) {
+                maniana = new Date(maniana.setDate(maniana.getDate() + 1))
+            }
 
-        store.dispatch(grabar(credito - menu.precio, [
-            enviarMensaje({
-                periferico: "impresora",
-                comando: "print",
-                subComando: {
-                    usuario: usuario.id,
-                    nombre: usuario.nombre,
-                    fecha: fecha,
-                    descripcion: (menu.titulo.substr(0, 18) + " $" + menu.precio),
-                    numero: menu.id
-                }
-            }),
-            guardarLogVenta({
-                periferico: "aplicacion",
-                comando: "saveLog",
-                subComando: {
-                    path: "/data/logs/Ventas_" + fecha.replace(/\//g, "_") + ".json",
-                    data: JSON.stringify({
+            const fecha = maniana.getDate().toString().padStart(2, "0") + "/" + (maniana.getMonth() + 1).toString().padStart(2, "0") + "/" + maniana.getFullYear().toString()
+
+            store.dispatch(grabar(credito - menu.precio, [
+                enviarMensaje({
+                    periferico: "impresora",
+                    comando: "print",
+                    subComando: {
                         usuario: usuario.id,
                         nombre: usuario.nombre,
-                        saldo: credito,
-                        fecha: new Date(),
-                        descripcion: menu.titulo,
-                        precio: menu.precio,
+                        fecha: fecha,
+                        descripcion: (menu.titulo.substr(0, 18) + " $" + menu.precio),
                         numero: menu.id
-                    }),
-                    separador: ","
-                }
-            }),
-            modoPantalla("viandamenuexito")
-        ]))
+                    }
+                }),
+                guardarLogVenta({
+                    periferico: "aplicacion",
+                    comando: "saveLog",
+                    subComando: {
+                        path: "/data/logs/Ventas_" + fecha.replace(/\//g, "_") + ".json",
+                        data: JSON.stringify({
+                            usuario: usuario.id,
+                            nombre: usuario.nombre,
+                            saldo: credito,
+                            fecha: new Date(),
+                            descripcion: menu.titulo,
+                            precio: menu.precio,
+                            numero: menu.id
+                        }),
+                        separador: ","
+                    }
+                }),
+                modoPantalla("viandamenuexito")
+            ]))
+        } else {
+
+            store.dispatch(mostrarError("Saldo insuficiente", "Puede recargar su tarjeta o seleccionar otro menu."))
+        }
 
 
 

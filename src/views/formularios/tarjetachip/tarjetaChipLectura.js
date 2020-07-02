@@ -30,18 +30,18 @@ import {
     servicio as servicioTC
 } from "../../../redux/actions/tarjetaChip";
 
-import {
-    usuarios
-} from "../../../configuracion/usuarios.json"
+
 
 const MODO_PANTALLA = "ui.timeStampPantalla"
 const TARJETA_CHIP = "tarjetaChip.respuestaTimeStamp"
 const TARJETA_CHIP_ERROR = "tarjetaChip.errorEnTarjeta"
-export class pantallaTarjetaChipLectura extends connect(store, MODO_PANTALLA, TARJETA_CHIP, TARJETA_CHIP_ERROR)(LitElement) {
+const USUARIOS = "aplicacion.usuariosTimeStamp"
+export class pantallaTarjetaChipLectura extends connect(store, MODO_PANTALLA, TARJETA_CHIP, TARJETA_CHIP_ERROR, USUARIOS)(LitElement) {
     constructor() {
         super();
         this.hidden = true
         this.idioma = "ES"
+        this.usuarios = []
     }
 
     static get styles() {
@@ -213,13 +213,16 @@ export class pantallaTarjetaChipLectura extends connect(store, MODO_PANTALLA, TA
 
     }
     stateChanged(state, name) {
+        if (name == USUARIOS) {
+            this.usuarios = state.aplicacion.usuarios
+        }
         if (name == MODO_PANTALLA && state.ui.quePantalla == "tarjetachiplectura") {
             store.dispatch(dispararTimer(tiempos.tarjetachiplectura.segundos, "mensajeespera", "tarjetachiplectura"))
             store.dispatch(servicioTC(true))
         }
         if (name == TARJETA_CHIP && state.ui.quePantalla == "tarjetachiplectura") {
             if (state.tarjetaChip.colocada) {
-                const usuario = usuarios.find(u => {
+                const usuario = this.usuarios.find(u => {
                     return u.id == state.tarjetaChip.usuario
                 })
                 if (!usuario) {

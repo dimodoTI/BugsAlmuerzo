@@ -26,6 +26,10 @@ import {
 import {
   pedirArchivo
 } from "./redux/actions/aplicacion"
+import {
+  servicio,
+  leer
+} from "./redux/actions/tarjetaChip"
 
 export let connection = null;
 
@@ -57,6 +61,20 @@ connection.onopen = () => {
     comando: "getJsonFile",
     subComando: "/data/importesPrecarga.json"
   }))
+
+
+  setTimeout(() => {
+    store.dispatch(servicio(true))
+  }, 1000)
+  setTimeout(() => {
+    store.dispatch(leer())
+  }, 2000)
+
+
+
+
+
+
 };
 
 connection.onerror = (error) => {

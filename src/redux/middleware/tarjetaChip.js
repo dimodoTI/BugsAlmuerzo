@@ -109,6 +109,7 @@ export const interpretarProccess = ({
                             dispatch(conectado())
                             break;
                         default:
+                            colocada = true
                             dispatch(errorEnTarjeta(status))
                             break
                     }

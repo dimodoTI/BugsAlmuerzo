@@ -50,6 +50,9 @@ export class pantallaMensajeError extends connect(store, MODO_PANTALLA, MOSTRAR_
         :host([hidden]){
             display: none; 
         }
+        :host(:not([con-boton])) .button{
+            display:none
+        }
         .button {
             border-radius: 2rem;
             background-color: var(--boton-fondo);
@@ -191,6 +194,7 @@ export class pantallaMensajeError extends connect(store, MODO_PANTALLA, MOSTRAR_
         if (name == MOSTRAR_MENSAJE) {
             this.titulo = state.ui.errorTitulo
             this.mensaje = state.ui.errorMensaje
+            this.conBotonVolver = state.conBotonVolver
             this.hidden = false
             this.update()
         }
@@ -201,6 +205,11 @@ export class pantallaMensajeError extends connect(store, MODO_PANTALLA, MOSTRAR_
             hidden: {
                 type: Boolean,
                 reflect: true
+            },
+            conBotonVolver: {
+                type: Boolean,
+                reflect: true,
+                attribute: "con-boton"
             }
         }
     }

@@ -36,11 +36,13 @@ import {
 
 const MODO_PANTALLA = "ui.timeStampPantalla"
 const TC_CONECTADO = "tarjetaChip.conectado"
+const TC_RESPUESTA = "tarjetaChip.respuestaTimeStamp"
 const IMPRESORA_PRENDIDA = "impresora.prendidaTimeStamp"
 const IMPRESORA_APAGADA = "impresora.apagadaTimeStamp"
 const IMPRESORA_ONLINE = "impresora.onlineTimeStamp"
 const IMPRESORA_OFLINE = "impresora.offlineTimeStamp"
-export class pantallaInicio extends connect(store, MODO_PANTALLA, TC_CONECTADO, IMPRESORA_PRENDIDA, IMPRESORA_APAGADA, IMPRESORA_ONLINE, IMPRESORA_OFLINE)(LitElement) {
+
+export class pantallaInicio extends connect(store, MODO_PANTALLA, TC_CONECTADO, IMPRESORA_PRENDIDA, IMPRESORA_APAGADA, IMPRESORA_ONLINE, IMPRESORA_OFLINE, TC_RESPUESTA)(LitElement) {
     constructor() {
         super();
         this.hidden = false
@@ -249,15 +251,15 @@ export class pantallaInicio extends connect(store, MODO_PANTALLA, TC_CONECTADO, 
     }
     venta() {
         store.dispatch(comandoVenta({
-            monto: 125,
+            monto: 12500,
             numeroFactura: 100000089012,
             cuotas: 1,
             codigoTarjeta: "VVI",
             codigoPlan: "1",
             montoPropina: 0,
             codigoComercio: "03659307",
-            nombreComercio: "PRISMA MP",
-            cuitComercio: "30-59891004-5",
+            nombreComercio: "INGENICO S.A.",
+            cuitComercio: "30-71513931-2",
             modo: 1
         }))
     }
@@ -292,6 +294,7 @@ export class pantallaInicio extends connect(store, MODO_PANTALLA, TC_CONECTADO, 
     }
 
 
+
     stateChanged(state, name) {
         if (name == MODO_PANTALLA && state.ui.quePantalla == "inicio") {
             store.dispatch(cancelarTimer())
@@ -301,6 +304,7 @@ export class pantallaInicio extends connect(store, MODO_PANTALLA, TC_CONECTADO, 
             this.tcConectado = state.tarjetaChip.conectado
             this.update();
         }
+
         if (name == IMPRESORA_PRENDIDA) {
             this.impresoraPrendida = true
             this.update();

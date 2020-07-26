@@ -85,10 +85,10 @@ export const setContador = (tiempo) => ({
   type: SET_CONTADOR,
   tiempo: tiempo
 });
-export const mostrarError = (titulo, mensaje, target, pantallaQueLLamo) => ({
+export const mostrarError = (titulo, mensaje, conBotonVolver) => ({
   type: MOSTRAR_ERROR,
   titulo: titulo,
   mensaje: mensaje,
-  target: target,
-  pantallaQueLLamo: pantallaQueLLamo
+  conBotonVolver: conBotonVolver
+
 });

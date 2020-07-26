@@ -12,6 +12,7 @@ import {
 import {
     modoPantalla,
     dispararTimer,
+    cancelarTimer,
     errorTitulo,
     errorMensaje,
     mostrarError,
@@ -46,7 +47,7 @@ export class pantallaViandaTarjetaChipLectura extends connect(store, MODO_PANTAL
         this.hidden = true
         this.idioma = "ES"
         this.usuarios = []
-
+        this.estadoErroneo = false
     }
 
     static get styles() {
@@ -217,13 +218,22 @@ export class pantallaViandaTarjetaChipLectura extends connect(store, MODO_PANTAL
         `
 
     }
+
     stateChanged(state, name) {
         if (name == USUARIOS) {
             this.usuarios = state.aplicacion.usuarios
         }
         if (name == MODO_PANTALLA && state.ui.quePantalla == "viandatarjetachiplectura") {
+            this.estadoErroneo = false
             store.dispatch(dispararTimer(tiempos.viandatarjetachiplectura.segundos, "mensajeespera", "viandatarjetachiplectura"))
             store.dispatch(servicioTC(true))
+            this.update()
+        }
+        if (name == TARJETA_CHIP_ERROR && state.ui.quePantalla == "viandatarjetachiplectura" && !this.estadoErroneo) {
+            this.estadoErroneo = true
+            store.dispatch(mostrarError("Error de lectura", "Su tarjeta chip no se pudo leer. Podria estar dañada o colocada incorrectamente. Retire su tarjeta.", false))
+            store.dispatch(cancelarTimer())
+            this.update()
         }
         if (name == TARJETA_CHIP && state.ui.quePantalla == "viandatarjetachiplectura") {
             if (state.tarjetaChip.colocada) {
@@ -231,22 +241,25 @@ export class pantallaViandaTarjetaChipLectura extends connect(store, MODO_PANTAL
                     return u.id == state.tarjetaChip.usuario
                 })
                 if (!usuario) {
-                    store.dispatch(mostrarError("Tarjeta no registrada", "Consulte con el proveedor de su tarjeta para que se habilte esta operación."))
+                    if (!this.estadoErroneo) {
+                        this.estadoErroneo = true
+                        store.dispatch(mostrarError("Tarjeta no registrada", "Consulte con el proveedor de su tarjeta para que se habilte esta operación.Retire su tarjeta", false))
+                        store.dispatch(cancelarTimer())
+                    }
+                } else {
+                    store.dispatch(guardarImporteSaldo(state.tarjetaChip.credito))
+                    store.dispatch(guardarUsuario({
+                        id: state.tarjetaChip.usuario,
+                        nombre: usuario.nombre
+                    }))
+                    store.dispatch(modoPantalla("viandaselecciontipomenu"))
                 }
-                store.dispatch(guardarImporteSaldo(state.tarjetaChip.credito))
-                store.dispatch(guardarUsuario({
-                    id: state.tarjetaChip.usuario,
-                    nombre: usuario.nombre
-                }))
-                store.dispatch(modoPantalla("viandaselecciontipomenu"))
-
             } else {
                 store.dispatch(modoPantalla("inicio"))
             }
+            this.update()
         }
-        if (name == TARJETA_CHIP_ERROR) {
-            store.dispatch(mostrarError("Error de lectura", "Su tarjeta chip no se pudo leer. Podria estar dañada. Intente nuevamente."))
-        }
+
     }
 
     static get properties() {

@@ -34,7 +34,12 @@ export class pantallaTarjetaChipSeleccionImporte extends connect(store, MODO_PAN
         super();
         this.hidden = true
         this.idioma = "ES"
-        this.importes = {}
+        this.importes = {
+            menor: {},
+            medio: {},
+            mayor: {}
+        }
+
     }
 
     static get styles() {

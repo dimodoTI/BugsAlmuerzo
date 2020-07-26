@@ -37,6 +37,7 @@ export class pantallaMensajeFueraLinea extends connect(store, MODO_PANTALLA, TC_
         this.hidden = true
         this.idioma = "ES"
         this.testing = process.env.NODE_ENV == "none"
+        this.status = ""
     }
 
     static get styles() {
@@ -139,6 +140,15 @@ export class pantallaMensajeFueraLinea extends connect(store, MODO_PANTALLA, TC_
         @keyframes imacolor {
             from{opacity: 0.6;} to {opacity: 0.8;}
         }
+        #status{
+            position:absolute;
+            bottom:0;
+            left:0;
+            background-color:black;
+            color:white;
+            font-size:.5rem;
+
+        }
         `
     }
     render() {
@@ -159,6 +169,7 @@ export class pantallaMensajeFueraLinea extends connect(store, MODO_PANTALLA, TC_
                 </div>
             </div>
         </div>
+        <div id="status">${this.status}</div>
         `
 
     }
@@ -167,9 +178,12 @@ export class pantallaMensajeFueraLinea extends connect(store, MODO_PANTALLA, TC_
             store.dispatch(cancelarTimer())
         }
         if (name != MODO_PANTALLA) {
-            if (!state.impresora.on || !state.impresora.online || !state.tarjetaChip.conectado) {
+            //if (!state.impresora.on || !state.impresora.online || !state.tarjetaChip.conectado) {
+            if (!state.tarjetaChip.conectado) {
+                this.status = "Impresora On:" + state.impresora.on + " " + "Online :" + state.impresora.online + " Chip:" + state.tarjetaChip.conectado
                 this.hidden = false
             } else {
+                this.status = ""
                 this.hidden = true
             }
             this.update()

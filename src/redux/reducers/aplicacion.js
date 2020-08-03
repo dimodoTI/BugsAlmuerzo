@@ -12,7 +12,9 @@ const initialState = {
     usuariosTimeStamp: null,
     usuarios: null,
     importesTimeStamp: null,
-    importes: null
+    importes: null,
+    tarjetasTimeStamp: null,
+    tarjetas: null
 
 };
 
@@ -33,6 +35,10 @@ export const reducer = (state = initialState, action) => {
             if (action.mensaje.subComando == "/data/importesPrecarga.json") {
                 newState.importes = action.mensaje.data
                 newState.importesTimeStamp = (new Date()).getTime()
+            }
+            if (action.mensaje.subComando == "/data/tarjetas.json") {
+                newState.tarjetas = action.mensaje.data
+                newState.tarjetasTimeStamp = (new Date()).getTime()
             }
 
             break;

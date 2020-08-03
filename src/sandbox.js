@@ -61,6 +61,11 @@ connection.onopen = () => {
     comando: "getJsonFile",
     subComando: "/data/importesPrecarga.json"
   }))
+  store.dispatch(pedirArchivo({
+    periferico: "aplicacion",
+    comando: "getJsonFile",
+    subComando: "/data/tarjetas.json"
+  }))
 
 
   setTimeout(() => {

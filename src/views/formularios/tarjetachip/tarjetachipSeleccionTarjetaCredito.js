@@ -22,9 +22,7 @@ import {
 import {
     tiempos
 } from "../../../redux/datos/tarjetachip/datos/tiempoEspera"
-import {
-    tarjetas
-} from "../../../redux/datos/tarjetachip/datos/tarjetas"
+
 import {
     comandoVenta
 } from "../../../redux/actions/posNet"
@@ -37,6 +35,7 @@ export class pantallaTarjetaChipSeleccionTarjetaCredito extends connect(store, M
         super();
         this.hidden = true
         this.idioma = "ES"
+        this.tarjetas = []
     }
 
     static get styles() {
@@ -182,7 +181,7 @@ export class pantallaTarjetaChipSeleccionTarjetaCredito extends connect(store, M
                 ${idiomas[this.idioma].paginas.seleccionTarjetaCredito.titulo}
             </div>
             <div id="tarjetasDIV">
-                    ${tarjetas.map(tarjeta => {
+                    ${this.tarjetas.map(tarjeta => {
                 return html
                     `
                     <div class="contenedor">
@@ -200,6 +199,7 @@ export class pantallaTarjetaChipSeleccionTarjetaCredito extends connect(store, M
     stateChanged(state, name) {
         if (name == MODO_PANTALLA && state.ui.quePantalla == "tarjetachipselecciontarjetacredito") {
             store.dispatch(dispararTimer(tiempos.tarjetachipselecciontarjetacredito.segundos, "mensajeespera", "tarjetachipselecciontarjetacredito"))
+            this.tarjetas = state.aplicacion.tarjetas
             this.update()
         }
         if (name == TARJETA_CHIP && state.ui.quePantalla == "tarjetachipselecciontarjetacredito") {

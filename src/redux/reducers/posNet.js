@@ -96,15 +96,17 @@ export const reducer = (state = initialState, action) => {
                         //encadena el siguiente caracter
                         newState.respuesta += m
                         //si es igual a la respuesta esperada
-                        if (newState.comandos[newState.ultimoComando].fin == m) {
-                            // si no espera DV termina el mensaje
-                            if (!newState.comandos[newState.ultimoComando].verificado) {
-                                newState.correcto = true
-                                newState.finDeMensaje = true
-                                newState.fin = false
-                            } else {
-                                // si espera DV continua escucahndo un caracter mas
-                                newState.fin = true
+                        if (newState.comandos[newState.ultimoComando]) {
+                            if (newState.comandos[newState.ultimoComando].fin == m) {
+                                // si no espera DV termina el mensaje
+                                if (!newState.comandos[newState.ultimoComando].verificado) {
+                                    newState.correcto = true
+                                    newState.finDeMensaje = true
+                                    newState.fin = false
+                                } else {
+                                    // si espera DV continua escucahndo un caracter mas
+                                    newState.fin = true
+                                }
                             }
                         }
                     }

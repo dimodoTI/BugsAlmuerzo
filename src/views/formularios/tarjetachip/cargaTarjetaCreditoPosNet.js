@@ -12,7 +12,8 @@ import {
 import {
     modoPantalla,
     dispararTimer,
-    mostrarError
+    mostrarError,
+    cancelarTimer
 } from "../../../redux/actions/ui";
 import {} from "../../../redux/reducers/tarjetaChipRecarga";
 import {
@@ -24,6 +25,9 @@ import {
 import {
     grabar
 } from "../../../redux/actions/tarjetaChip";
+import {
+    guardarLogVenta
+} from "../../../redux/actions/aplicacion";
 
 const RESPUESTA_POSNET = "posNet.respuestaTimeStamp"
 const MODO_PANTALLA = "ui.timeStampPantalla"
@@ -34,6 +38,7 @@ export class pantallacargaTarjetaCreditoPosNet extends connect(store, MODO_PANTA
         this.hidden = true
         this.tarjeta = ""
         this.idioma = "ES"
+        this.currentUsuario = ""
     }
 
     static get styles() {
@@ -200,34 +205,100 @@ export class pantallacargaTarjetaCreditoPosNet extends connect(store, MODO_PANTA
             <div id="descripcion">
                 ${idiomas[this.idioma].paginas.cargaPosNet.leyenda}
             </div>
-            <div id="pie">
+           <!--  <div id="pie">
                 <input type="button" class="buttonAtras" value=${idiomas[this.idioma].paginas.general.volver} @click="${this.volver}">
-            </div>
+            </div> -->
         </div>
         `
 
     }
     stateChanged(state, name) {
         if (name == MODO_PANTALLA && state.ui.quePantalla == "cargatarjetacreditoposnet") {
-            store.dispatch(dispararTimer(tiempos.cargatarjetacreditoposnet.segundos, "mensajeespera", "cargatarjetacreditoposnet"))
+            store.dispatch(cancelarTimer())
+            // store.dispatch(dispararTimer(tiempos.cargatarjetacreditoposnet.segundos, "mensajeespera", "cargatarjetacreditoposnet"))
             this.tarjeta = state.tarjetachipRecarga.tarjeta
+            this.currentUsuario = state.tarjetachipRecarga.usuario.id
             this.update()
         }
         if (name == RESPUESTA_POSNET && state.ui.quePantalla == "cargatarjetacreditoposnet") {
+            const hoy = new Date()
+            const fecha = hoy.getDate().toString().padStart(2, "0") + "/" + (hoy.getMonth() + 1).toString().padStart(2, "0") + "/" + hoy.getFullYear().toString()
             if (state.posNet.respuestaCodigo == "TERMINADO" && state.posNet.respuestaMensaje == "OK") {
-                store.dispatch(grabar(state.tarjetaChip.credito + state.tarjetachipRecarga.recarga))
-                store.dispatch(modoPantalla("tarjetachiprecargaexito"))
+                if (state.tarjetaChip.colocada && this.currentUsuario == state.tarjetachipRecarga.usuario.id) {
+                    store.dispatch(grabar(state.tarjetaChip.credito + state.tarjetachipRecarga.recarga))
+                    store.dispatch(guardarLogVenta({
+                        periferico: "aplicacion",
+                        comando: "saveLog",
+                        subComando: {
+                            path: "/data/logs/Recargas_" + fecha.replace(/\//g, "_") + ".json",
+                            data: JSON.stringify({
+                                id: state.tarjetachipRecarga.recargaTimeStamp,
+                                usuario: state.tarjetachipRecarga.usuario.id,
+                                nombre: state.tarjetachipRecarga.usuario.nombre,
+                                TCTD: state.tarjetachipRecarga.tarjeta.titulo,
+                                recarga: state.tarjetachipRecarga.recarga,
+                                saldo: state.tarjetachipRecarga.saldo,
+                                nuevoSaldo: state.tarjetaChip.credito + state.tarjetachipRecarga.recarga,
+                                error: "No",
+                                errorDetalle: ""
+                            }),
+                            separador: "\n"
+                        }
+                    }))
+                    store.dispatch(modoPantalla("tarjetachiprecargaexito"))
+                } else {
+                    store.dispatch(guardarLogVenta({
+                        periferico: "aplicacion",
+                        comando: "saveLog",
+                        subComando: {
+                            path: "/data/logs/Recargas_" + fecha.replace(/\//g, "_") + ".json",
+                            data: JSON.stringify({
+                                id: state.tarjetachipRecarga.recargaTimeStamp,
+                                usuario: state.tarjetachipRecarga.usuario.id,
+                                nombre: state.tarjetachipRecarga.usuario.nombre,
+                                TCTD: state.tarjetachipRecarga.tarjeta.titulo,
+                                recarga: state.tarjetachipRecarga.recarga,
+                                saldo: state.tarjetachipRecarga.saldo,
+                                nuevoSaldo: state.tarjetachipRecarga.saldo,
+                                error: "SI",
+                                errorDetalle: "se quito/cambio la tarjeta en medio de la operacion"
+                            }),
+                            separador: "\n"
+                        }
+                    }))
+                    store.dispatch(mostrarError("Operacion fallida", "Se ha quitado/cambiado la tarjeta chip. Retire sus tarjetas ", true))
+                }
             } else {
-                //store.dispatch(mostrarError("Operacion fallida", "No se pudo terminar la operacion."))
+                store.dispatch(guardarLogVenta({
+                    periferico: "aplicacion",
+                    comando: "saveLog",
+                    subComando: {
+                        path: "/data/logs/Recargas_" + fecha.replace(/\//g, "_") + ".json",
+                        data: JSON.stringify({
+                            id: state.posNet.respuestaTimeStamp,
+                            usuario: state.tarjetachipRecarga.usuario.id,
+                            nombre: state.tarjetachipRecarga.usuario.nombre,
+                            TCTD: state.tarjetachipRecarga.tarjeta.titulo,
+                            recarga: state.tarjetachipRecarga.recarga,
+                            saldo: state.tarjetachipRecarga.saldo,
+                            nuevoSaldo: state.tarjetachipRecarga.saldo,
+                            error: "SI",
+                            errorDetalle: state.posNet.respuestaMensaje
+                        }),
+                        separador: "\n"
+                    }
+                }))
+                store.dispatch(mostrarError("Operacion fallida", "No se pudo terminar la operacion.Retire su tarjeta del Posnet y su tarjeta chip.", true))
+
                 //store.dispatch(modoPantalla("inicio"))
-                store.dispatch(grabar(state.tarjetaChip.credito + state.tarjetachipRecarga.recarga))
-                store.dispatch(modoPantalla("tarjetachiprecargaexito"))
+                //store.dispatch(grabar(state.tarjetaChip.credito + state.tarjetachipRecarga.recarga))
+                //store.dispatch(modoPantalla("tarjetachiprecargaexito"))
             }
 
         }
         if (name == TARJETA_CHIP && state.ui.quePantalla == "cargatarjetacreditoposnet") {
             if (!state.tarjetaChip.colocada) {
-                store.dispatch(modoPantalla("inicio"))
+                //  store.dispatch(modoPantalla("inicio"))
             }
         }
 

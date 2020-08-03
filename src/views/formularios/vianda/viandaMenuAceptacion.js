@@ -385,7 +385,7 @@ export class pantallaViandaMenuAceptacion extends connect(store, MODO_PANTALLA, 
                             precio: menu.precio,
                             numero: menu.id
                         }),
-                        separador: ","
+                        separador: "\n"
                     }
                 }),
                 modoPantalla("viandamenuexito")

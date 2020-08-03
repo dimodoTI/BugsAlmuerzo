@@ -194,7 +194,7 @@ export class pantallaMensajeError extends connect(store, MODO_PANTALLA, MOSTRAR_
         if (name == MOSTRAR_MENSAJE) {
             this.titulo = state.ui.errorTitulo
             this.mensaje = state.ui.errorMensaje
-            this.conBotonVolver = state.conBotonVolver
+            this.conBotonVolver = state.ui.errorConBotonVolver
             this.hidden = false
             this.update()
         }
@@ -211,22 +211,17 @@ export class pantallaMensajeError extends connect(store, MODO_PANTALLA, MOSTRAR_
                 reflect: true,
                 attribute: "con-boton"
             }
+
         }
     }
 
     volver() {
         this.hidden = true
         this.update()
+        store.dispatch(modoPantalla("inicio"))
         //store.dispatch(modoPantalla(store.getState().ui.pantallaQueLLamo))
     }
 
-    /* proximaPantalla() {
-        store.dispatch(guardarImporteSaldo(120))
-        store.dispatch(guardarUsuario({
-            id: 1,
-            nombre: "Sergio Ferro"
-        }))
-        store.dispatch(modoPantalla("tarjetachipseleccionimporte"))
-    } */
+
 }
 window.customElements.define("pantalla-mensajeerror", pantallaMensajeError);

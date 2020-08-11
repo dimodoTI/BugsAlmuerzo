@@ -89,7 +89,7 @@ export class pantallaInicio extends connect(store, MODO_PANTALLA, TC_CONECTADO, 
         	animation-timing-function: ease-in-out;
             animation-delay: 1s;
             animation-iteration-count: infinite;          
-            animation-name: aniBoton;
+            /* animation-name: aniBoton; */
         }
         #fondoimagen01{
             position:absolute;

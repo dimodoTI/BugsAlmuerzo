@@ -83,11 +83,11 @@ export const reducer = (state = initialState, action) => {
                             newState.respuestaCodigo = "ERROR"
                             newState.respuestaMensaje = newState.respuesta.substr(5, 3)
                         }
-                        if (newState.respuesta.indexOf(ACK + STX + "VEN000") == 0) {
+                        /* if (newState.respuesta.indexOf(ACK + STX + "VEN000") == 0) {
                             newState.respuestaCodigo = "TERMINADO CON ALERTA"
                             newState.respuestaMensaje = newState.respuesta.substr(10, 2)
-                        }
-                        if (newState.respuesta.indexOf(ACK + ACK + STX + "VEN000") == 0) {
+                        } */
+                        if (newState.respuesta.indexOf(ACK + STX + "VEN000") == 0) {
                             newState.respuestaCodigo = "TERMINADO"
                             newState.respuestaMensaje = "OK"
                         }

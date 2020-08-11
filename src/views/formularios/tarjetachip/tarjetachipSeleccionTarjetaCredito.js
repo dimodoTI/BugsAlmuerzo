@@ -234,7 +234,7 @@ export class pantallaTarjetaChipSeleccionTarjetaCredito extends connect(store, M
             codigoTarjeta: store.getState().tarjetachipRecarga.tarjeta.codigo,
             codigoPlan: "1",
             montoPropina: 0,
-            codigoComercio: "03659307",
+            codigoComercio: store.getState().tarjetachipRecarga.tarjeta.codigoComercio,
             nombreComercio: "PRISMA MP",
             cuitComercio: "30-59891004-5",
             modo: 1

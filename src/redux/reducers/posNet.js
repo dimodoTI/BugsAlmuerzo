@@ -14,6 +14,7 @@ import {
 
 const initialState = {
     respuesta: "",
+    respuestaObject: {},
     respuestaCodigo: "",
     respuestaMensaje: "",
     control: "",
@@ -46,6 +47,7 @@ export const reducer = (state = initialState, action) => {
             newState.correcto = false
             newState.comandos = action.comandos
             newState.ultimoComando = 0
+            newState.respuestaObject = {}
             break;
         case COMANDO:
             if (newState.ultimoComando != action.comando) {
@@ -83,14 +85,29 @@ export const reducer = (state = initialState, action) => {
                             newState.respuestaCodigo = "ERROR"
                             newState.respuestaMensaje = newState.respuesta.substr(5, 3)
                         }
-                        /* if (newState.respuesta.indexOf(ACK + STX + "VEN000") == 0) {
-                            newState.respuestaCodigo = "TERMINADO CON ALERTA"
-                            newState.respuestaMensaje = newState.respuesta.substr(10, 2)
-                        } */
                         if (newState.respuesta.indexOf(ACK + STX + "VEN000") == 0) {
-                            newState.respuestaCodigo = "TERMINADO"
-                            newState.respuestaMensaje = "OK"
+                            let inicioTrama = 44
+                            newState.respuestaObject = {
+                                codigoAutorizacion: parseInt(newState.respuesta.substr(inicioTrama, 6), 10),
+                                numeroCupon: parseInt(newState.respuesta.substr(inicioTrama + 6, 7), 10),
+                                numeroLote: parseInt(newState.respuesta.substr(inicioTrama + 13, 3), 10),
+                                cliente: newState.respuesta.substr(inicioTrama + 16, 26),
+                                ultimosDigitos: newState.respuesta.substr(inicioTrama + 42, 4),
+                                primerosDigitos: newState.respuesta.substr(inicioTrama + 46, 6),
+                                fecha: newState.respuesta.substr(inicioTrama + 52, 10),
+                                hora: newState.respuesta.substr(inicioTrama + 62, 8),
+                                terminal: newState.respuesta.substr(inicioTrama + 70, 8)
+
+                            }
+                            if (newState.respuestaObject.codigoAutorizacion == 0) {
+                                newState.respuestaCodigo = "TERMINADO CON ALERTA"
+                                newState.respuestaMensaje = "VER TRAMA"
+                            } else {
+                                newState.respuestaCodigo = "TERMINADO"
+                                newState.respuestaMensaje = "OK"
+                            }
                         }
+
 
                     } else {
                         //encadena el siguiente caracter

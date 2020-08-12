@@ -13,8 +13,10 @@ const initialState = {
     usuarios: null,
     importesTimeStamp: null,
     importes: null,
+    tarjetas: null,
     tarjetasTimeStamp: null,
-    tarjetas: null
+    horarios: null,
+    horariosTimestamp: null
 
 };
 
@@ -39,6 +41,10 @@ export const reducer = (state = initialState, action) => {
             if (action.mensaje.subComando == "/data/tarjetas.json") {
                 newState.tarjetas = action.mensaje.data
                 newState.tarjetasTimeStamp = (new Date()).getTime()
+            }
+            if (action.mensaje.subComando == "/data/horarios.json") {
+                newState.horarios = action.mensaje.data
+                newState.horariosTimestamp = (new Date()).getTime()
             }
 
             break;

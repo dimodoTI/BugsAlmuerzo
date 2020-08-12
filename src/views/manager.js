@@ -31,6 +31,9 @@ import {
 import {
   pantallaMensajeFueraLinea
 } from "../views/formularios/inicio/mensajeFueraLinea";
+import {
+  pantallaFueraServicio
+} from "../views/formularios/inicio/fueraServicio";
 
 import {
   pantallaTarjetaChipLectura
@@ -100,6 +103,7 @@ export class viewManager extends connect(store, QUEPANTALLA)(LitElement) {
       <mensaje-espera id="mensajeespera"></mensaje-espera>
       <pantalla-mensajeerror id="mensajeerror"></pantalla-mensajeerror>
       <pantalla-mensajefueralinea id="fueralinea"></pantalla-mensajefueralinea>
+      <pantalla-fuera-servicio id="fueraServicio"></pantalla-fuera-servicio>
       <pantalla-quitar-tarjeta id="quitarTarjeta"></pantalla-quitar-tarjeta>
 
       <pantalla-inicio id="inicio"></pantalla-inicio>
@@ -134,6 +138,7 @@ export class viewManager extends connect(store, QUEPANTALLA)(LitElement) {
       <pantalla-viandamenuexito
         id="viandamenuexito"
       ></pantalla-viandamenuexito>`;
+
   }
 
   conectar() {

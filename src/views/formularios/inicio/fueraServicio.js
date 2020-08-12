@@ -31,13 +31,14 @@ const IMPRESORA_PRENDIDA = "impresora.prendidaTimeStamp"
 const IMPRESORA_APAGADA = "impresora.apagadaTimeStamp"
 const IMPRESORA_ONLINE = "impresora.onlineTimeStamp"
 const IMPRESORA_OFFLINE = "impresora.offlineTimeStamp"
-export class pantallaMensajeFueraLinea extends connect(store, MODO_PANTALLA, TC_CONECTADO, IMPRESORA_OFFLINE, IMPRESORA_ONLINE, IMPRESORA_PRENDIDA, IMPRESORA_APAGADA)(LitElement) {
+export class pantallaFueraServicio extends connect(store, MODO_PANTALLA, TC_CONECTADO, IMPRESORA_OFFLINE, IMPRESORA_ONLINE, IMPRESORA_PRENDIDA, IMPRESORA_APAGADA)(LitElement) {
     constructor() {
         super();
         this.hidden = true
         this.idioma = "ES"
         this.testing = process.env.NODE_ENV == "none"
         this.status = ""
+        this.horario = ""
     }
 
     static get styles() {
@@ -126,7 +127,7 @@ export class pantallaMensajeFueraLinea extends connect(store, MODO_PANTALLA, TC_
             text-align: center;
             color:var(--titulo-texto);
         }
-        #mensaje{
+        #mensaje,#horario{
             background-color:transparent;
             padding-left:1rem;
             padding-right:1rem;
@@ -162,10 +163,13 @@ export class pantallaMensajeFueraLinea extends connect(store, MODO_PANTALLA, TC_
             </div>
             <div id="fondocuerpo">
                 <div id="titulo"  @click="${this.volver}">
-                    ${idiomaInicio[this.idioma].paginas.eTituloFueraDeLinea.mensaje}
+                    ${idiomaInicio[this.idioma].paginas.eTituloFueraDeServicio.mensaje}
                 </div>
                 <div id="mensaje">
-                    ${idiomaInicio[this.idioma].paginas.eMensajeFueraDeLinea.mensaje}
+                    ${idiomaInicio[this.idioma].paginas.eMensajeFueraDeServicio.mensaje}
+                </div>
+                <div id="horario">
+                    ${this.horario}
                 </div>
             </div>
         </div>
@@ -174,17 +178,22 @@ export class pantallaMensajeFueraLinea extends connect(store, MODO_PANTALLA, TC_
 
     }
     stateChanged(state, name) {
-        if (name == MODO_PANTALLA && state.ui.quePantalla == "error") {
-            store.dispatch(cancelarTimer())
-        }
+
         if (name != MODO_PANTALLA) {
-            if (!state.impresora.on || !state.impresora.online || !state.tarjetaChip.conectado) {
-                this.status = " Impresora On:" + state.impresora.on + " Online :" + state.impresora.online + " Chip:" + state.tarjetaChip.conectado
-                this.hidden = false
-            } else {
-                this.status = ""
-                this.hidden = true
+
+            let atendiendo = false
+
+            if (state.aplicacion.horarios) {
+                this.horario = state.aplicacion.horarios.desde + " a " + state.aplicacion.horarios.hasta
+                const ahora = (new Date).toLocaleTimeString().substr(0, 5)
+                atendiendo = (ahora > state.aplicacion.horarios.desde && ahora < state.aplicacion.horarios.hasta)
             }
+            this.hidden = true
+            if (!atendiendo && state.ui.quePantalla == "inicio") {
+                this.hidden = false
+            }
+
+
             this.update()
         }
     }
@@ -207,4 +216,4 @@ export class pantallaMensajeFueraLinea extends connect(store, MODO_PANTALLA, TC_
     }
 
 }
-window.customElements.define("pantalla-mensajefueralinea", pantallaMensajeFueraLinea);
+window.customElements.define("pantalla-fuera-servicio", pantallaFueraServicio);

@@ -12,8 +12,8 @@ const initialState = {
     apagadaTimeStamp: null,
     onlineTimeStamp: null,
     offlineTimeStamp: null,
-    on: false,
-    online: false
+    on: true,
+    online: true
 
 };
 

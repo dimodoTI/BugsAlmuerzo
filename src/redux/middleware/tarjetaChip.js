@@ -29,7 +29,7 @@ export const grabarProcces = ({
         dispatch(operadoraEnviar({
             periferico: "tarjetaChip",
             comando: "write",
-            subComando: ">G," + action.importe.toString(16).toUpperCase().padStart(4, "0")
+            subComando: ">G," + (action.importe * 100).toString(16).toUpperCase().padStart(6, "0")
         }))
     }
 };
@@ -72,9 +72,11 @@ export const servicioProcces = ({
 };
 
 const ejecutarNextActions = (dispatch, nextActions) => {
-    nextActions.forEach(action => {
-        dispatch(action)
-    })
+    if (nextActions) {
+        nextActions.forEach(action => {
+            dispatch(action)
+        })
+    }
 }
 export const interpretarProccess = ({
     dispatch,
@@ -83,13 +85,13 @@ export const interpretarProccess = ({
     next(action);
     if (action.type === INTERPRETAR) {
         decodeURIComponent(action.mensaje.data).split("").forEach(m => {
-            if (m.charCodeAt(0) != 16) {
+            if (m.charCodeAt(0) != 10 && m.charCodeAt(0) != 16) {
                 dispatch(buffer(m))
             } else {
                 const respuestas = getState().tarjetaChip.buffer.split(",")
                 if (respuestas.length == 3) {
                     let usuario = parseInt(respuestas[0].substr(1), 16)
-                    let importe = parseInt(respuestas[1], 16)
+                    let importe = parseInt(respuestas[1], 16) / 100
                     let status = parseInt(respuestas[2], 16)
                     let colocada = false
                     switch (status) {

@@ -239,6 +239,7 @@ export class pantallacargaTarjetaCreditoPosNet extends connect(store, MODO_PANTA
                                 recarga: state.tarjetachipRecarga.recarga,
                                 saldo: state.tarjetachipRecarga.saldo,
                                 nuevoSaldo: state.tarjetaChip.credito + state.tarjetachipRecarga.recarga,
+                                respuesta: state.posNet.respuestaObject,
                                 error: "No",
                                 errorDetalle: ""
                             }),
@@ -260,6 +261,7 @@ export class pantallacargaTarjetaCreditoPosNet extends connect(store, MODO_PANTA
                                 recarga: state.tarjetachipRecarga.recarga,
                                 saldo: state.tarjetachipRecarga.saldo,
                                 nuevoSaldo: state.tarjetachipRecarga.saldo,
+                                respuesta: state.posNet.respuestaObject,
                                 error: "SI",
                                 errorDetalle: "se quito/cambio la tarjeta en medio de la operacion"
                             }),
@@ -282,6 +284,7 @@ export class pantallacargaTarjetaCreditoPosNet extends connect(store, MODO_PANTA
                             recarga: state.tarjetachipRecarga.recarga,
                             saldo: state.tarjetachipRecarga.saldo,
                             nuevoSaldo: state.tarjetachipRecarga.saldo,
+                            respuesta: state.posNet.respuestaObject,
                             error: "SI",
                             errorDetalle: state.posNet.respuestaMensaje
                         }),
@@ -289,10 +292,6 @@ export class pantallacargaTarjetaCreditoPosNet extends connect(store, MODO_PANTA
                     }
                 }))
                 store.dispatch(mostrarError("Operacion fallida", "No se pudo terminar la operacion.Retire su tarjeta del Posnet y su tarjeta chip.", true))
-
-                //store.dispatch(modoPantalla("inicio"))
-                //store.dispatch(grabar(state.tarjetaChip.credito + state.tarjetachipRecarga.recarga))
-                //store.dispatch(modoPantalla("tarjetachiprecargaexito"))
             }
 
         }
